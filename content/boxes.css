@@ -1,0 +1,57 @@
+
+
+lc-note, lc-solution, lc-todo, lc-warning,
+lc-def {
+    --rgb_color : 43, 226, 43;
+    display: block;
+
+    border: solid 1px;
+    border-left: solid 0.25em;
+    
+    padding: 0.5em;
+    padding-left: 0.5em;
+    margin: 0.25em;
+
+    /*background-color: rgba(var(--rgb_color), 0.1);*/
+    border-color: rgb(var(--rgb_color));
+}
+lc-note::before, lc-solution::before, lc-todo::before, lc-warning::before,
+lc-def::before {
+    /*color: rgb(var(--rgb_color));*/
+    font-weight: bold;
+    content: "<< undef >>";
+    display: inline-block;
+    margin-right: 1em;
+
+    color: rgb(var(--rgb_color));
+}
+
+lc-note::before {
+    content: "\1F6C8  NOTE:";
+}
+lc-solution::before {
+    content: "\1F6C8  SOLUTION:";
+}
+
+lc-warning {
+    --rgb_color : 180, 126, 9;
+}
+lc-warning::before {
+    content: "\26A0  WARNING:";
+}
+lc-todo {
+    --rgb_color: 137, 43, 226;
+}
+lc-todo::before {
+    content: "\26A0  TODO:";
+}
+
+lc-def::before {
+    content: "Def:";
+}
+
+blockquote {
+    border-left: solid 0.125em gray;
+    padding-left: 0.5em;
+    margin-left: 0.5em;
+}

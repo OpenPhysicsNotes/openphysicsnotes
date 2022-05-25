@@ -1,0 +1,32 @@
+{
+  "name": "openphysicsnotes",
+  "version": "0.0.0",
+  "description": "openphysicsnotes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc",
+    "serve": "node dist/index.js",
+    "start": "npm run build && npm run serve"
+  },
+  "keywords": [
+    "openphysicsnotes"
+  ],
+  "author": "Luca Ciucci",
+  "license": "MIT",
+  "dependencies": {
+    "@types/js-yaml": "^4.0.5",
+    "@types/markdown-it": "^12.2.3",
+    "@types/node": "^17.0.35",
+    "http": "^0.0.1-security",
+    "js-yaml": "^4.1.0",
+    "markdown-it": "^13.0.1",
+    "markdown-it-container": "^3.0.0",
+    "markdown-it-emoji": "^2.0.2",
+    "markdown-it-footnote": "^3.0.3",
+    "markdown-it-include": "^2.0.0",
+    "markdown-it-sup": "^1.0.0",
+    "socket.io": "^4.5.1",
+    "typescript": "^4.6.4"
+  }
+}

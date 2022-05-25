@@ -1,0 +1,694 @@
+
+/*
+searching css inter on google:
+https://fonts.google.com/specimen/Inter
+*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300&display=swap');
+@import url('./code.css');
+@import url('./boxes.css');
+
+/* see https://developer.mozilla.org/en-US/docs/Web/API/Document/scroll_event#specifications */
+:root {
+
+    --theme_H: 216;
+    --theme_Ha: 0;
+    --theme_Ha: 120;
+    --theme_HSL: var(--theme_H), 88%, 71%;
+    --theme_lighter_HSL: var(--theme_H), 50%, 71%;
+
+    --content-max-width: 100rem;--content-max-width: 75rem;
+    --left-sidebar-width: 15em;
+    --right-sidebar-width: 10em;
+
+    --link-color: hsl(var(--theme_HSL));
+    --topnav-color: rgba(255, 255, 255, 0.07);
+
+    --header-height: 3.5rem;
+    --header-border: 1px solid rgba(128, 128, 128, 0.5);
+    --header-color: transparent;
+}
+
+body {
+    background: rgb(21, 20, 26);
+
+    color: white;
+    color: rgb(220, 220, 220);
+    /*font-family: 'Times New Roman', Times, serif;*/
+    font-family: sans-serif;
+    /*font-size: 12pt;*/
+    padding: 0;
+    margin: 0;
+
+    font-family: 'Inter', sans-serif;
+}
+
+lc-content, lc-content *, header, header * {
+    /*border: 2px solid gray;
+    margin: 2px;*/
+}
+
+header {
+    background: var(--header-color);
+    padding: 0;
+    border-bottom: var(--header-border);
+    overflow: hidden;
+}
+
+header > * {
+    max-width: var(--content-max-width);
+    margin: auto;
+    display: flex;
+    height: 2em;
+    height: var(--header-height);
+}
+
+header .button {
+    height: var(--header-height);
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+}
+
+header .button > * {
+    /*display: inline-block;*/
+    display: fle;
+
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+
+header a, header a:hover,
+header a:visited, header a:visited:hover {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+header .links {
+    display: flex;
+    overflow: hidden;
+    flex-wrap: wrap;
+    flex-grow: 1;
+
+    color: gray;
+}
+
+lc-topnav {
+    display: block;
+
+    background-color: var(--topnav-color);
+    border-bottom: var(--header-border);
+
+    padding: 0.5em;
+}
+
+lc-topnav > * {
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    max-width: var(--content-max-width);
+}
+
+lc-topnav a, lc-topnav a:visited {
+    color: inherit;
+    text-decoration: none;
+    /*border-left: 1px solid gray;*/
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+lc-topnav a::after, lc-topnav a:hover:after {
+    content: " >";
+    margin-left: 0.5em;
+    text-decoration: none;
+    color: gray;
+}
+header a:hover, header a:visited:hover,
+lc-topnav a:hover, lc-topnav a:visited:hover
+{
+    color: var(--link-color);
+}
+
+lc-content {
+    display: grid;
+    grid-template-columns: [first-start] var(--left-sidebar-width) [first-end content-start] auto [content-end last-start] var(--right-sidebar-width) [last-end];
+    column-gap: 0.5em;
+    /*gap: 1em;*/
+
+    max-width: var(--content-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1em;
+}
+
+lc-nav-index {
+    grid-column: last-start / last-end;
+    grid-row: 1/2;
+    list-style-type: none;
+    display: block;
+    
+    font-size: 85%;
+}
+lc-nav-index > aside {
+    top: 0;
+    position: sticky;
+}
+lc-nav-index > aside > li {
+    border: none;
+    border-left: 2px solid gray;
+    margin: 0;
+    padding: 0.25em;
+    padding-left: 0.5rem;
+    margin-left: 0.5rem;
+}
+lc-nav-index > aside > li[active] {
+    border-left-color: hsl(var(--theme_HSL));
+    background-color: hsl(var(--theme_HSL), 0.125);
+}
+
+lc-nav-index > aside > li.sub {
+    padding-left: 1rem;
+    font-size: 75%;
+}
+
+lc-nav-index > aside {
+    max-height: 80vh;
+}
+
+lc-nav-index > aside a, lc-nav-index > aside a:visited,
+lc-nav-index > aside a:hover, lc-nav-index > aside a:visited:hover {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+lc-nav-index > aside a:hover, lc-nav-index > aside a:visited:hover {
+    color: var(--link-color);
+}
+
+lc-sidebar {
+    grid-column: first-start / first-end;
+    grid-row: 1/2;
+}
+
+lc-sidebar, lc-nav-index > aside {
+    overflow: auto;
+}
+
+article {
+    /*grid-column-start: second;*/
+    grid-column: content-start / content-end;
+    grid-row: 1/2;
+    /*overflow-x: hidden;*/
+    overflow: hidden;
+}
+
+@media only screen and (max-width: 70em) {
+    :root {
+        --right-sidebar-width: 0;
+    }
+    lc-content {
+        grid-template-rows: 50vh auto;
+    }
+    lc-sidebar, lc-nav-index > aside {
+        max-height: 40vh;
+        overflow: auto;
+    }
+    lc-nav-index {
+        grid-column: first-start / first-end;
+        grid-row: 2 / 3;
+    }
+    lc-sidebar {
+        grid-row: 1 / 2;
+    }
+    article {
+        grid-row: 1 / 3;
+    }
+}
+@media only screen and (max-width: 40em) {
+    :root {
+        --left-sidebar-width: 0;
+    }
+    lc-nav-index {
+        display: none;
+    }
+    lc-nav-index, lc-sidebar {
+        grid-column: content-start / content-end;
+        grid-row: auto;
+    }
+    lc-sidebar {
+        /*grid-row: auto;*/
+        grid-row: last-start / last-end;
+    }
+    article {
+        grid-row: auto;
+    }
+}
+
+article h1 {
+    text-align: center;
+    font-size: 200%;
+    color: hsl(var(--theme_lighter_HSL));
+}
+article h2 {
+    font-size: 175%;
+    border-bottom: 1px solid var(--link-color);
+    color: hsl(var(--theme_lighter_HSL));
+}
+article h3 {
+    font-size: 125%;
+    color: hsl(var(--theme_lighter_HSL));
+}
+article h4 {
+    /*font-size: 125%;*/
+}
+/*article a, article a:visited*/
+lc-content a, lc-content a:visited {
+    color: var(--link-color);
+}
+
+lc-sidebar ul {
+    list-style-type: none;
+    padding-left: 1em;
+}
+
+/* https://www.w3schools.com/howto/howto_css_custom_scrollbar.asp */
+lc-content *::-webkit-scrollbar {
+    width: 10px;
+}
+
+lc-content *::-webkit-scrollbar-track {
+    background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+:target {
+    animation: target-animation 5s;
+}
+
+@keyframes target-animation {
+    from {
+        background: hsla(var(--theme_HSL), 0.75);
+        /*border: 1px solid hsl(var(--theme_HSL));*/
+    }
+
+    to {
+        background: transparent;
+        /*background: inherit;
+        border: inherit;*/
+    }
+}
+
+/*
+========================================================================
+*/
+table.basic-table {
+    width: 100%;
+}
+/*.basic-table tr td:first {
+    width: 75%;
+}*/
+table.basic-table, table.basic-table th, table.basic-table td {
+    border-collapse: collapse;
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+
+    vertical-align: top;
+}
+.basic-table td {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+table.basic-table th, table.basic-table td {
+    border-left: 1px solid gray;
+}
+table.basic-table th:first-of-type, table.basic-table td:first-of-type {
+    border-left: none;
+}
+
+.basic-table td, .basic-table th {
+    padding: 0.5em;
+}
+
+table.basic-table td.return-type, table.basic-table td.type {
+    width: 20%;
+    text-align: right;
+}
+
+article details {
+    border-radius: 0.5em;
+    border-left: 0.25em solid var(--link-color);
+    margin-left: 0.25em;
+    padding-left: 0.5em;
+}
+
+article details summary { 
+    cursor: pointer;
+}
+
+@keyframes target-fade {
+	from { background-color: cyan}
+	to { background-color: transparent; }
+}
+
+.tooltip {
+    position: relative;
+}
+
+/*
+https://www.w3schools.com/css/css_tooltip.asp
+https://codepen.io/otwm/pen/yLLwvJz
+*/
+.tooltip .tooltiptext {
+    all: initial;
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    display: block;
+    text-decoration: none;
+
+    text-align: left;
+
+    border-radius: 0.5em;
+    border: 1px solid gray;
+    background-color: black;
+    color: white;
+    font-size: 85%;
+    padding: 0.5em;
+
+    z-index: 1;
+
+}
+
+.tooltip .tooltiptext {
+    transition: 0.25s all ease;
+    /*top: -2em;*/
+    transform: perspective(100em) translate(0, 3em);
+    transform: perspective(100em) rotateX(-45deg) translate(0, 5em);
+    /* hide after 0.5s */
+    transition-delay: 0.5s;
+}
+
+.tooltip:hover {
+    background: rgba(127, 127, 127, 0.5);
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+
+    /* show after 1s */
+    transition-delay: 1s;
+
+    /*top: 1.5em;*/
+    transform: perspective(100em) translate(0, 1.5em);
+}
+
+p, article .p, article .paragraph {
+    display: block;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+p::before, article .p::before, article .paragraph::before {
+    content: "";
+    padding-right: 0.25em;
+}
+
+lc-figure-a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0.5em;
+    /*border: solid 1px red;
+    background: red;*/
+}
+
+lc-figure-a .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5em;
+
+    width: fit-content;
+
+    border: 1px solid gray;
+    border-radius: 0.5em;
+}
+
+lc-figure-a .label {
+    font-size: 85%;
+    /*width: 50%;*/
+    max-width: 25em;
+}
+
+lc-figure {
+    display: block;
+    width: 50%;
+    margin: auto;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+
+    border: 1px solid gray;
+    border-radius: 0.5em;
+    padding: 0.5em;
+}
+
+lc-figure:not(.float) {
+}
+
+lc-figure.float {
+    width: 33%;
+    margin: 0.5em;
+}
+lc-figure.float.left {
+    float: left;
+}
+lc-figure.float.right {
+    float: right;
+}
+
+.circled {
+    border-radius: 50%;
+    border: 1px solid gray;
+    padding: 0.25em;
+}
+
+.squared {
+    border-radius: 0.5em;
+    border: 1px solid gray;
+    padding: 0.25em;
+}
+div.squared {
+    margin: 0.5em;
+}
+
+.underlined {
+    border-bottom: 1px solid gray;
+    /*padding-bottom: 0.25em;*/
+}
+
+.red:is(.squared, .circled, .underlined) {
+    border-color: red;
+}
+.blue:is(.squared, .circled, .underlined) {
+    border-color: cornflowerblue;
+}
+.green:is(.squared, .circled, .underlined) {
+    border-color: green;
+}
+.yellow:is(.squared, .circled, .underlined) {
+    border-color: yellow;
+}
+.orange:is(.squared, .circled, .underlined) {
+    border-color: orange;
+}
+
+/*
+https://stackoverflow.com/questions/39858998/zoom-in-and-out-on-mouse-click-with-css
+*/
+lc-figure img {
+    cursor: zoom-in;
+}
+lc-figure img:active {
+    -webkit-transform: scale(2);
+    transform: scale(2);
+    cursor: zoom-out;
+}
+
+tex-math {
+    display: block;
+}
+i-math {
+    display: inline;
+}
+
+/*
+================================
+        COURSES TIMELINE
+================================
+*/
+
+.courses-timeline {
+    /*border : 1px solid gray;*/
+
+    display: grid;
+
+    /*grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));*/
+
+    grid-template-rows: repeat(auto-fit, 1.25em);
+
+    grid-gap: 0.25em;
+    grid-row-gap: 0.5em;
+    padding: 0.25em;
+}
+.courses-timeline > .course {
+    grid-column: 1;
+    /*grid-row: 1;*/
+
+    border-radius: 0.5em;
+
+    background: gray;
+}
+
+/*
+https://developer.mozilla.org/en-US/docs/Web/CSS/mix-blend-mode
+
+
+*/
+.courses-timeline > .course > * {
+    /*mix-blend-mode: difference;*/
+    color: white;
+    font-weight: bold;
+    /*filter: invert(100%);*/
+}
+
+.courses-timeline > .course a, .courses-timeline .course > a:active, .courses-timeline .course > a:focus, .courses-timeline .course > a:hover {
+    display: block; size: 100%;
+
+    color: inherit;
+    text-decoration: none;
+    text-align: center;
+    text-shadow: 0 0 0.25em black;
+    /*https://css-tricks.com/almanac/properties/t/text-stroke/*/
+}
+
+/*
+GitHub Copilot chose these colors
+https://stackoverflow.com/questions/57835697/how-to-properly-cycle-through-nth-of-type
+*/
+.courses-timeline>.course:nth-of-type(30n+1) {
+    background: red;
+}
+.courses-timeline>.course:nth-of-type(30n+2) {
+    background: blue;
+}
+.courses-timeline>.course:nth-of-type(30n+3) {
+    background: cyan;
+}
+.courses-timeline>.course:nth-of-type(30n+4) {
+    background: green;
+}
+.courses-timeline>.course:nth-of-type(30n+5) {
+    background: gray;
+}
+.courses-timeline>.course:nth-of-type(30n+6) {
+    background: orange;
+}
+.courses-timeline>.course:nth-of-type(30n+7) {
+    background: yellow;
+}
+.courses-timeline>.course:nth-of-type(30n+8) {
+    background: purple;
+}
+.courses-timeline>.course:nth-of-type(30n+9) {
+    background: brown;
+}
+.courses-timeline>.course:nth-of-type(30n+10) {
+    background: pink;
+}
+.courses-timeline>.course:nth-of-type(30n+11) {
+    background: magenta;
+}
+.courses-timeline>.course:nth-of-type(30n+12) {
+    background: teal;
+}
+.courses-timeline>.course:nth-of-type(30n+13) {
+    background: violet;
+}
+.courses-timeline>.course:nth-of-type(30n+14) {
+    background: salmon;
+}
+.courses-timeline>.course:nth-of-type(30n+15) {
+    background: gold;
+}
+.courses-timeline>.course:nth-of-type(30n+16) {
+    background: indigo;
+}
+.courses-timeline>.course:nth-of-type(30n+17) {
+    background: navy;
+}
+.courses-timeline>.course:nth-of-type(30n+18) {
+    background: crimson;
+}
+.courses-timeline>.course:nth-of-type(30n+19) {
+    background: lime;
+}
+.courses-timeline>.course:nth-of-type(30n+20) {
+    background: olive;
+}
+.courses-timeline>.course:nth-of-type(30n+21) {
+    background: teal;
+}
+.courses-timeline>.course:nth-of-type(30n+22) {
+    background: violet;
+}
+.courses-timeline>.course:nth-of-type(30n+23) {
+    background: salmon;
+}
+.courses-timeline>.course:nth-of-type(30n+24) {
+    background: gold;
+}
+.courses-timeline>.course:nth-of-type(30n+25) {
+    background: indigo;
+}
+.courses-timeline>.course:nth-of-type(30n+26) {
+    background: navy;
+}
+.courses-timeline>.course:nth-of-type(30n+27) {
+    background: crimson;
+}
+.courses-timeline>.course:nth-of-type(30n+28) {
+    background: lime;
+}
+.courses-timeline>.course:nth-of-type(30n+29) {
+    background: olive;
+}
+.courses-timeline>.course:nth-of-type(30n+30) {
+    background: teal;
+}
+
+
+/*
+https://www.usability.gov/how-to-and-tools/methods/color-basics.html#:~:text=Cool%20colors%20include%20green%2C%20blue,more%20subdued%20than%20warm%20colors.
+*/
+
+/*
+================================
+        RENDER PREVIEW
+================================
+*/
+.render-preview {
+    background: rgb(30, 30, 30);
+    border-radius: 0.5em;
+    border: 1px solid gray;
+    padding: 0.25em;
+}
