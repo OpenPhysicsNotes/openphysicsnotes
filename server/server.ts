@@ -12,6 +12,8 @@ import { ArticlePage, ArticlePathElement, RelatedArticle } from './ArticlePage';
 
 import { Server } from 'socket.io';
 
+import qrcodeTerminal from 'qrcode-terminal'
+
 class NetworkInterface {
 	name: string;
 	addresses: string[] = [];
@@ -326,7 +328,11 @@ export default function(netname : string, port : number) {
 	});
 	
 	server.listen(port, host, () => {
-		console.log(`Server is running on http://${host}:${port}`);
+		let local_url = `http://${host}:${port}`;
+		if (netname) {
+			qrcodeTerminal.generate(local_url, { small: true });
+		}
+		console.log(`Server is running on ${local_url}`);
 		console.log(__dirname);
 	});
 	
