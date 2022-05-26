@@ -230,6 +230,9 @@ article {
     :root {
         --left-sidebar-width: 0;
     }
+    lc-content {
+        grid-template-rows: unset;
+    }
     lc-nav-index {
         display: none;
     }
@@ -239,10 +242,10 @@ article {
     }
     lc-sidebar {
         /*grid-row: auto;*/
-        grid-row: last-start / last-end;
+        grid-row: 2 / 3;
     }
     article {
-        grid-row: auto;
+        grid-row: 1 / 2;
     }
 }
 
