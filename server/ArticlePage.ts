@@ -101,7 +101,7 @@ class ArticlePage {
 		${this.article_content}
 
 		<hr>
-		<a href="./?raw">raw content</a>
+		<a href="?raw">raw content</a>
 	</article>
 	<lc-nav-index></lc-nav-index>
 </lc-content>
