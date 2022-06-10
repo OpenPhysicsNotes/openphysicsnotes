@@ -43,6 +43,7 @@ You can use your preferred text editor, we suggest [VSCode](https://code.visuals
 If you use VSCode, you may be interested in the following plugins:
  - [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker) for spell checking of your documents
  - [Markdown Emoji](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-emoji) if you want to see emoji in VSCode default preview window
+ - [SVG Editor](https://marketplace.visualstudio.com/items?itemName=henoc.svgeditor)
 
 ::: note
 We hope we can provide a VSCode extension soon to make it easier editing without starting the local server

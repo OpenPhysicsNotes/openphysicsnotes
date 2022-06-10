@@ -1,0 +1,54 @@
+.gsc-control-cse {
+    background: transparent;
+    border: none;
+}
+.gsc-search-button {
+    background-color: hsl(var(--theme_H), 100%, 40%);
+    background: none;
+    border-color: hsl(var(--theme_HSL));
+}
+.gsc-search-button svg path {
+    fill: hsl(var(--theme_HSL));
+}
+.gsc-input-box {
+    border-color: hsl(var(--theme_HSL));
+}
+.gsc-input-box, .gsc-input {
+    background: none;
+}
+.gsc-input {
+    color: var(--text_color);
+}
+.gsc-input-box input::-webkit-input-placeholder::before {
+    content: "ciao";
+    color: red;
+}
+/*.gsc-input-box {
+    background: transparent;
+}
+.gsc-input {
+    background: none;
+    background-clip: ;
+    color: cyan;
+}
+.gsc-input-box {
+    color: red;
+}*/
+
+.gsc-completion-container {
+    background: black;
+    color: var(--text_color);
+}
+.gsc-completion-container b {
+    color: hsl(var(--theme_HSL));
+    color: gray;
+}
+
+/*.gsc-results-wrapper-overlay {
+    background: rgb(21, 20, 26);
+}*/
+
+article img[alt="logo"] {
+    filter: hue-rotate(-182deg) hue-rotate(216deg);
+    /*filter: hue-rotate(334deg);*/
+}

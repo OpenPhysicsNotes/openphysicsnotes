@@ -10,7 +10,7 @@ https://fonts.google.com/specimen/Inter
 /* see https://developer.mozilla.org/en-US/docs/Web/API/Document/scroll_event#specifications */
 :root {
 
-    --theme_H: 216;
+    --theme_H: 216deg;
     --theme_Ha: 0;
     --theme_Ha: 120;
     --theme_HSL: var(--theme_H), 88%, 71%;
@@ -26,13 +26,75 @@ https://fonts.google.com/specimen/Inter
     --header-height: 3.5rem;
     --header-border: 1px solid rgba(128, 128, 128, 0.5);
     --header-color: transparent;
+
+    --text_color: rgb(220, 220, 220);
+
+    /* !!! */
+
+    --background_image: none;
+
+    --paper_color: hsla(0, 0%, 0%, 0.9);/*con questo ci vuole il bordo*/
+    --paper_color: hsla(0, 0%, 10%, 0.9);
+}
+body[lc-dark-theme] {
+
+    --background_image: url("/img/intero_blur.webp");
+
+}
+:root[light-mode] {
+
+}
+
+body fixed-bg-image {
+    display: none;
+}
+
+body[bg-image] fixed-bg-image {
+    display: block;
+
+    z-index: -2;
+    position: fixed;
+    top: 0;
+
+    width: 100%;
+    height: 100%;
+
+    /*filter: blur(4px);*/
+
+    /*-moz-transition: background-image 1s ease-in-out;*/
+    -webkit-transition: background-image 1s ease-in-out;
+    transition: background-image 1s ease-in-out;
+}
+
+body[bg-image] article,
+body[bg-image] lc-nav-index,
+body[bg-image] lc-sidebar > div {
+    background: var(--paper_color);
+    border-radius: 1em;
+}
+body[bg-image] article {
+    border: solid 1px rgba(128, 128, 128, 0.5);
+    padding: 1em;
+}
+body[bg-image] header,
+body[bg-image] lc-topnav {
+    background: var(--paper_color);
+}
+
+body[bg-image] lc-sidebar > div {
+    border-top: 4px solid rgb(0, 128, 128);
+    padding: 0.5em;
 }
 
 body {
     background: rgb(21, 20, 26);
+    background-image: var(--background_image);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 
     color: white;
-    color: rgb(220, 220, 220);
+    color: var(--text_color);
     /*font-family: 'Times New Roman', Times, serif;*/
     font-family: sans-serif;
     /*font-size: 12pt;*/
@@ -62,7 +124,7 @@ header > * {
     height: var(--header-height);
 }
 
-header .button {
+header .button, header .search-form {
     height: var(--header-height);
     overflow: hidden;
 
@@ -71,6 +133,15 @@ header .button {
     justify-content: center;
 
     flex-shrink: 0;
+}
+
+header img.logo {
+    border-top-width: 0.35em;
+    border-bottom-width: 0.35em;
+    border-style: solid;
+    border-color: transparent;
+    height: 100%;
+    box-sizing: border-box;
 }
 
 header .button > * {
@@ -96,6 +167,11 @@ header .links {
     color: gray;
 }
 
+header .search-form {
+    min-width: 10em;
+    flex-shrink: 1;
+}
+
 lc-topnav {
     display: block;
 
@@ -119,7 +195,7 @@ lc-topnav a, lc-topnav a:visited {
     padding-left: 0.5em;
     padding-right: 0.5em;
 }
-lc-topnav a::after, lc-topnav a:hover:after {
+lc-topnav a:not(:last-of-type):after, lc-topnav a:not(:last-of-type):hover:after {
     content: " >";
     margin-left: 0.5em;
     text-decoration: none;
@@ -163,9 +239,12 @@ lc-nav-index > aside > li {
     padding-left: 0.5rem;
     margin-left: 0.5rem;
 }
-lc-nav-index > aside > li[active] {
+lc-nav-index > aside > li[active], lc-nav-index > aside > li[slightly-active] {
     border-left-color: hsl(var(--theme_HSL));
     background-color: hsl(var(--theme_HSL), 0.125);
+}
+lc-nav-index > aside > li[active] {
+    color: hsl(var(--theme_HSL));
 }
 
 lc-nav-index > aside > li.sub {
@@ -269,6 +348,33 @@ article h4 {
 /*article a, article a:visited*/
 lc-content a, lc-content a:visited {
     color: var(--link-color);
+}
+
+article h1 a, article h1 a:visited,
+article h2 a, article h2 a:visited,
+article h3 a, article h3 a:visited,
+article h4 a, article h4 a:visited,
+article h5 a, article h5 a:visited,
+article h6 a, article h6 a:visited {
+    text-decoration: inherit;
+    color: inherit;
+}
+article h2 a:hover, article h2 a:visited:hover,
+article h3 a:hover, article h3 a:visited:hover,
+article h4 a:hover, article h4 a:visited:hover,
+article h5 a:hover, article h5 a:visited:hover,
+article h6 a:hover, article h6 a:visited:hover {
+    text-decoration: underline;
+}
+article h2 a:hover::after, article h2 a:visited:hover::after,
+article h3 a:hover::after, article h3 a:visited:hover::after,
+article h4 a:hover::after, article h4 a:visited:hover::after,
+article h5 a:hover::after, article h5 a:visited:hover::after,
+article h6 a:hover::after, article h6 a:visited:hover::after {
+    content: " #";
+    margin-left: 0.5em;
+    text-decoration: none;
+    color: gray;
 }
 
 lc-sidebar ul {
@@ -694,4 +800,39 @@ https://www.usability.gov/how-to-and-tools/methods/color-basics.html#:~:text=Coo
     border-radius: 0.5em;
     border: 1px solid gray;
     padding: 0.25em;
+}
+
+
+.text-align-center {
+    text-align: center;
+}
+
+p:first-of-type {
+    margin-top: 0;
+}
+p:last-of-type {
+    margin-bottom: 0;
+}
+
+
+.top-notice {
+    --rgb: 128, 128, 128;
+
+    border-top: solid 1px gray;
+    border-bottom: solid 1px gray;
+    border-color: rgb(var(--rgb));
+    background: rgba(var(--rgb), 0.25);
+    text-align: center;
+
+    padding: 0.25em;
+}
+
+.top-notice.orange {
+    --rgb: 255, 165, 0;
+}
+
+article > img, article > p > img {
+    display: block;
+    max-width: 80%;
+    margin: auto;
 }

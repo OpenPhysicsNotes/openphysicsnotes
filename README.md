@@ -31,6 +31,19 @@ Note that this website **is not** a *encyclopedia*, use [WikipediA](wikipedia.or
  - [ ] create an awesome graphics
  - [ ] use 3rd level domains for the editing app, sharing content, wiki, and other stuff
  - [ ] TODO use [creativecommons.org](https://creativecommons.org/)
+ - [ ] dark/light theme
+ - [ ] a [two.js](https://two.js.org/) based or inspired graphics library that allows contributors to easily write professional drawings, with the possibility of fluid animations. (The problem is how to make intellisense work in such files for a library like this, see [working with javascript](https://code.visualstudio.com/docs/nodejs/working-with-javascript))
+ - [ ] [pyscript](https://pyscript.net/)
+ - [ ] serve content using a react application instead od dynamically generated html, or use a react application in `edit.openphysicsnotes.org`, a VS like website that uses browser storage to make changes and push on github or any other cloud.
+ - [ ] `raw.*.org`
+ - [ ] `drive.*.org`
+ - [ ] `raw.drive.*.org`
+ - [ ] edit link like mdn + edit directly on `github.dev`
+ - [ ] opn preview plugin + something like `.opn.config.json/yaml` and relative schema
+ - [ ] caching
+ - [ ] pdf and latex exportation
+ - [ ] un file config.ts per fare in modo che alcune impostazioni come live reload sia abilitato solo in development; move reloader in a separate file instead of plain js inside the html
+ - [ ] [compression](https://www.npmjs.com/package/compression)
 
 ## Stuff organization
 

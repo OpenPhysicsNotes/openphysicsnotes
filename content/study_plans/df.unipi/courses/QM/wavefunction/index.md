@@ -14,15 +14,15 @@ _De Broglie_ relation:
   \lambda = \frac{h}{p}
 </tex-math>
 
-$\Longrightarrow$ we can describe the state of the system not in terms of simultaneous values of all canonical valiables $\left\{ p,\, q \right\}$ as in classical mechanics but in a sort of wave.
+$\Longrightarrow$ we can describe the state of the system not in terms of simultaneous values of all canonical variables $\left\{ p,\, q \right\}$ as in classical mechanics but in a sort of wave.
 
 ::: note
-**The foundamental law of quantum mechanics:**  
+**The fundamental law of quantum mechanics:**  
 *the quantum state of a given system is described by a complex function called **wave function**:*
 $$
     \text{quantum state} \sim \psi(\{q\}, t)
 $$
-*That depends on the canonical coordinates and the time but not the cojugate momenta*
+*That depends on the canonical coordinates and the time but not the conjugate momenta*
 :::
 
 The knowledge of the wave function amounts to the complete knowledge of the quantum state of the system, thus we can determine the probability of getting any measurement made in this state.
@@ -36,10 +36,10 @@ As the total probability must be 1, we must impose the *normalization condition*
 <tex-math id="eq:norm-condition">
     \left||\psi\right||^2 = \int \left|\psi(\{q\}, t)\right|^2 dq = 1
 </tex-math>
-We call any $\psi$ for which the integral $\int \left|\psi(\{q\}, t)\right|^2 dq$ is finite *normalizable* (and we say $\psi \sim c\psi$ as thay represents the same physical quantum state).
+We call any $\psi$ for which the integral $\int \left|\psi(\{q\}, t)\right|^2 dq$ is finite *normalizable* (and we say $\psi \sim c\psi$ as they represents the same physical quantum state).
 
 ::: warning
-Non normalizable wave funcitons such as $\psi(\mathbf{r}, t) = e^{+r^{2}}$ do not represents any physical state.
+Non normalizable wave functions such as $\psi(\mathbf{r}, t) = e^{+r^{2}}$ do not represents any physical state.
 :::
 
 ::: note
@@ -57,7 +57,7 @@ OSS
 :::
 
 
-In QM, $\psi \sim c\psi$, while thwo calssical waves differing by an amplitude factor describes different fenomena (for example different intensity).
+In QM, $\psi \sim c\psi$, while two classical waves differing by an amplitude factor describes different phenomena (for example different intensity).
 
 ### The superposition principle
 
@@ -107,7 +107,7 @@ A, B *non-interacting* and *uncorrelated* subsystems, the wave function takes a 
 <tex-math>
   \psi_{A, B} = \psi_A \psi_B
 </tex-math>
-This leads to the factorized probabilities, refflecting the independence of the two subsystems.
+This leads to the factorized probabilities, reflecting the independence of the two subsystems.
 
 ## Photon polarization
 
@@ -126,7 +126,7 @@ in the radiation gauge (<a href="https://physics.stackexchange.com/questions/332
 <lc-todo>
   RISTUDIA LE GAUGE E VERIFICA
 </lc-todo>
-this means that, give $\mathbf{k}$, the allowed $\mathbf{\epsilon}$ vectors live in a 2-dim subspace i.e. *there are **two indipendent** possible **polarizations***.
+this means that, give $\mathbf{k}$, the allowed $\mathbf{\epsilon}$ vectors live in a 2-dim subspace i.e. *there are **two independent** possible **polarizations***.
 
 For example: linear polarization in the $\mathbf{x}$ direction ($\mathbf{\epsilon^1} = (1, 0, 0)$, $\mathbf{k} = (0, 0, 1)$):
 <tex-math>
@@ -139,7 +139,7 @@ For the $\mathbf{y}$ direction it is the same with $\mathbf{\epsilon^2} = (0, 1,
 
 Circular polarization can be described with, for example, $\mathbf{\epsilon^1} = \frac{1}{\sqrt{2}}(1, i, 0)$.
 
-In Q.M. light is a flux of photons and their polarization is due to two possible quantum states of a photon of gievn momentum (i.e. given wavelenght and direction of propagation).
+In Q.M. light is a flux of photons and their polarization is due to two possible quantum states of a photon of given momentum (i.e. given wavelength and direction of propagation).
 
 ::: todo
 continua...
@@ -192,7 +192,7 @@ continua...
           &= \int_{-\infty}^\infty \widetilde{\psi}(p) \; e^{i p x / \hbar} dp
         \end{split}
       </tex-math>
-      to undestand what is $\widetilde{\psi}$:
+      to understand what is $\widetilde{\psi}$:
       <tex-math>
         \lambda = \frac{2 \pi \hbar}{p}
         \;\; \Longrightarrow \;\;
@@ -220,7 +220,7 @@ continua...
     </details>
 </lc-note>
 
-## Foundamental Postulate
+## Fundamental postulate
 
 How are dynamic variables threated in such formalism?  
 
@@ -248,18 +248,117 @@ so that its expectation value is given according to:
 \hat{f}\psi_n = f_n\psi_n; \;\;\; ||\psi_n|| = 1
 </tex-math>
 
-Where $\psi_n$ eigenfuction represents
+Where $\psi_n$ represents an eigenfunction relative to the eigenvalue $f_n$, it is known as the *eigenstate* of $f$. In such state there is indeed no dispersion:
+<tex-math>
+\braket{\psi_n | \hat{f}^2 | \psi_n} - \braket{\psi_n | \hat{f} | \psi_n}^2 = 0
+</tex-math>
+<details>
+<summary>proof</summary>
+<tex-math>
+\begin{split}
+\braket{\psi_n | \hat{f}^2 | \psi_n} - \braket{\psi_n | \hat{f} | \psi_n}^2 &=
+\braket{\psi_n | \hat{f}^2 \psi_n} - \braket{\psi_n | \hat{f} \psi_n}^2 \\
+&= \braket{\psi_n | \hat{f} f_n \psi_n} - \braket{\psi_n | f_n \psi_n}^2 \\
+&= \braket{\psi_n | f_n \hat{f} \psi_n} - \braket{\psi_n | f_n \psi_n}^2 \\
+&= \braket{\psi_n | f_n^2 \psi_n} - \braket{\psi_n | f_n \psi_n}^2 \\
+&= f_n^2 \braket{\psi_n | \psi_n} - f_n^2 \braket{\psi_n | \psi_n}^2 \\
+&= f_n^2 - f_n^2 \\
+&= 0
+\end{split}
+</tex-math>
+</details>
 
-i.e. 
+A generic state:
+<tex-math>
+\psi(q) = \sum_n c_n \\, \psi_n(q)
+</tex-math>
+con $||\psi_n|| = 1$.
+
+::: note
+->**fundamental postulate of quantum mechanics**<-
+The probability of finding a result $f_n$ for the measurement of $f$ on $\psi(q) = \sum_n c_n \, \psi_n(q)$ is:
+<tex-math>
+P_n = |c_n|^2
+</tex-math>
+::: todo
+DEF
+:::
+:::
+
+Orthogonality of eigenstates:
+<tex-math>
+\braket{\psi_n|\psi_m} = \int dq \psi_n^*\psi_m = \delta_{n,m}
+</tex-math>
+...
+expectation value:
+<tex-math>
+\braket{\psi_n|\hat{f}|\psi_m} = ... = \sum_n P_n f_n
+</tex-math>
+
+remember:
+<tex-math>
+\braket{\psi_n|\psi} = c_n
+</tex-math>
+
+::: note
+(postulate) the state immediately after the measurement resulted in $f_n$ is $\ket{\psi_n} \equiv \ket{n}$
+
+<tex-math>
+P_n = \braket{\psi|\mathcal{P}_n|\psi}
+</tex-math>
+:::
+
+## Hermitian operators
+
+- transposed $\hat{f}^T$
+- hermitian conjugate $\hat{f}^\dag = (\hat{f}^T)^*$
+
+*Hermitian operator*:
+<tex-math>
+\braket{\phi|\hat{f}\psi} = \braket{\psi|\hat{f}\phi}^* = \braket{\hat{f}\phi|\psi}
+\\;\\; \forall \psi, \phi \in \mathcal{D}(\hat{f})
+</tex-math>
+
+::: note
+Any *dynamical variable* (*real* expectation value) is associated with an *hermitian operator*
+:::
+
 
 ::: todo
 continua...
 :::
 
-
+**Teo.**: *The eigenstates of an Hermitian operator, associated with distinct eigenvalues, are mutually orthogonal*.
 
 ::: todo
-use https://github.com/camelaissani/markdown-it-include
+proof
+:::
+
+### Position and momentum operators
+
+position operator:
+$$
+\hat{x} \psi(x, t) = x \psi(x, t)
+$$
+
+momentum operator:
+$$
+\hat{p} = -i \hbar \frac{\partial}{\partial x}
+$$
+$$
+\mathbf{p} = -i \hbar \mathbf{\nabla}
+$$
+<details open>
+<summary>proof</summary>
+p. de broglie: <i-math>\psi \sim e^{i(px - wt)/\hbar} \Rightarrow p \sim \frac{\hbar}{i}\frac{d}{dx} \psi<i-math>
+</details>
+
+$$
+\left[\hat{x}, \hat{p}\right] = i \hbar
+$$
+
+::: todo
+proof
 :::
 
 []: # Language: markdown

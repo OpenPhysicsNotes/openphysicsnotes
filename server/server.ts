@@ -1,115 +1,71 @@
 
+import dotenv from 'dotenv';
+dotenv.config();
 
-import * as http from 'http'
-import path from 'path';
+import express from 'express';
 import fs from 'fs';
 
-import Markdown2Html from './markdown';
+import { default_mime_types } from './mime_types'
+import path from 'path';
 
-import { networkInterfaces } from 'os';
+import { BasicHtml5Page } from './html_generators/basic_html';
+import { ArticlePage, MdArticlePage } from './html_generators/article';
 
-import { ArticlePage, ArticlePathElement, RelatedArticle } from './ArticlePage';
+import url from 'url';
+import logger from './logger';
+import redirection_messages from './redirection_messages';
+import { extractMeta } from './meta_exctractor';
 
-import { Server } from 'socket.io';
+import { watchFile } from './files_watcher';
+import http from 'http';
+import { init_io, io } from './io';
+import { getHostName, getPort } from './hostname';
 
-import qrcodeTerminal from 'qrcode-terminal'
+import qrcodeTerminal from 'qrcode-terminal';
 
-class NetworkInterface {
-	name: string;
-	addresses: string[] = [];
+const hostname = getHostName();
+const port = getPort();
+const viewBaseFolder = path.join(__dirname, "../content/");
+
+var app = express();
+
+var server = http.createServer(app);
+init_io(server);
+
+function actual_404(res: express.Response) {
+	res.status(404);
+	res.end("404 not found");
 }
 
-// https://stackoverflow.com/questions/3653065/get-local-ip-address-in-node-js
+function send_404(req : express.Request, res : express.Response) {
+	res.status(404);
 
-function getNetworkAdresses() {
-	const nets = networkInterfaces();
-
-	const results : NetworkInterface[] = [];
-	
-	for (const name of Object.keys(nets)) {
-		for (const net of nets[name]) {
-			// Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
-			// 'IPv4' is in Node <= 17, from 18 it's a number 4 or 6
-			const familyV4Value = typeof net.family === 'string' ? 'IPv4' : 4
-			if (net.family === familyV4Value && !net.internal) {
-				if (!results[name]) {
-					results[name] = [];
-				}
-				let tmp_interface = new NetworkInterface();
-				tmp_interface.name = name;
-				tmp_interface.addresses.push(net.address);
-				results.push(tmp_interface);
-				//results[name].push(net.address);
-			}
+	res.sendFile(path.join(viewBaseFolder, "404.html"), (err) => {
+		if (err) {
+			logger.error(`error while sending 404, err: ${err}`);
+			actual_404(res);
 		}
-	}
-
-	return results;
+	});
 }
 
-const root = __dirname + "/../content";
-
-class RequestPath {
-
-	path_list : string[] = [];
-	query : string = ""
-	
-	constructor(path: string, query: string) {
-		path.split("/").forEach(p => {
-			if (p !== "") {
-				this.path_list.push(p);
-			}
-		});
-
-		this.query = query;
+function validate_url(url : string, req : express.Request, res : express.Response) : boolean {
+	if (!url.startsWith("/")) {
+		logger.error(`url must start with /, url: "${url}"`);
+		send_404(req, res);
+		return false;
 	}
-	
-	static parse(path: string) : RequestPath {
 
-		let splitted = path.split("?");
-		
-		const query = splitted[1];
-		
-		return new RequestPath(splitted[0], query);
+	// see https://stackoverflow.com/questions/65980534/how-to-deal-with-path-traversal
+	if (url.match(/\.\.\//g) != null) {
+		logger.error(`url contains ../, url: "${url}"`);
+		send_404(req, res);
+		return false;
 	}
-	
-	static parseFromRequest(request: http.IncomingMessage) : RequestPath {
-		
-		const path = request.url;
-		
-		return RequestPath.parse(path);
-	}
-	
-	static fromRequest(request: http.IncomingMessage) : RequestPath {
-		
-		const path = request.url;
-		
-		return RequestPath.parse(path);
-	}
-	
 
-	get path() : string {
-		return this.path_list.join("/");
-	}
+	return true;
 }
 
-let watchingFiles = new Map<string, fs.FSWatcher>();
-
-var io : Server | null = null;
-
-function watchFile(filePath: string) {
-	if (!watchingFiles.has(filePath)) {
-		watchingFiles.set(filePath, fs.watch(filePath, (eventType, filename) => {
-			console.log(`${filePath} changed.`);
-			console.log(`${eventType} ${filename}`);
-
-			//io.sockets.send(`${filePath} changed.`);
-			if (io) {
-				io.sockets.emit(`file-changed`, filePath);
-			}
-		}));
-	}
-}
+const redirectable_extensions = [".html", ".md"];
 
 function findFile(fileName: string, base: string): string | null {
 
@@ -123,6 +79,7 @@ function findFile(fileName: string, base: string): string | null {
 	}
 
 	const filePath = path.join(base, fileName);
+
 	if (fs.existsSync(filePath)) {
 
 		if (fs.statSync(filePath).isDirectory()) {
@@ -137,208 +94,267 @@ function findFile(fileName: string, base: string): string | null {
 			}
 
 			return findFile(fileName + "/index.md", base);
+		} else {
+			if (endsWithSlash) {
+				return "///REDIRECT-NO-SLASH///";
+			}
 		}
 
 		return filePath;
 	}
+
 	return null;
 }
 
-function isHtmlFile(fileName: string): boolean {
-	return fileName.endsWith(".html");
-}
+function serveProcessedMd(filePath: string, req : express.Request, res: express.Response) {
+	let fileContent = fs.readFileSync(filePath, 'utf8');
 
-function isMarkdownFile(fileName: string): boolean {
-	return fileName.endsWith(".md");
-}
+	let extracted = extractMeta(fileContent);
 
-function isIcoFile(fileName: string): boolean {
-	return fileName.endsWith(".ico");
-}
+	let article = new MdArticlePage();
 
-let markdownParser = new Markdown2Html();
+	article.markdown_article = extracted.content;
+	article.url = url.parse(req.url).pathname;
 
-function serveMarkdownFile(filePath: string, response: http.ServerResponse, path : RequestPath) : boolean {
-	if (!isMarkdownFile(filePath)) {
-		return false;
+	if (extracted.meta) {
+		article.useYamlMeta(extracted.meta);
 	}
 
+	// check if hostname is a local ip address
+	let hostname = req.hostname;
+	if ((hostname.match(/^\d+\.\d+\.\d+\.\d+$/) || hostname.match(/^localhost$/)) && false) {
+		article.local = true;
+		article.fileUrl = filePath;
+	} else {
+		article.url = article.url.replace(/\\/g, "/");
+		filePath = filePath.replace(/\\/g, "/");
+		let pos = filePath.indexOf(article.url);
+		if (pos != -1) {
+			article.fileUrl = path.join(article.url, filePath.substring(pos + article.url.length));
+		} else {
+			article.fileUrl = article.url;
+		}
+	}
+
+	logger.info(`serving processed md, filePath: "${filePath}", title: "${article.title}"`);
+
+	res.setHeader("Content-Type", default_mime_types["html"]);
+	res.end(article.html);
+
+	// !!!
 	watchFile(filePath);
+}
 
-	let processed = markdownParser.process(fs.readFileSync(filePath, 'utf-8'));
-
-	response.writeHead(200, {
-		'Content-Type': 'text/html'
-	});
-
-	let title = "???";
-	if (processed.meta.title) {
-		title = processed.meta.title;
-	}
-
-	let page = new ArticlePage();
-
-	page.title = title;
-	page.article_content = processed.html;
-
-	if (processed.meta.related_articles instanceof Array) {
+function servePlainFile(filePath: string, req : express.Request, res: express.Response) : boolean {
+	if (fs.existsSync(filePath)) {
 		
-		for (let related_article of processed.meta.related_articles) {
-			let article = new RelatedArticle();
+		console.log(`serving plain file, filePath: "${filePath}"`);
+		res.setHeader("Content-Type", default_mime_types["txt"]);
+		let stream = fs.createReadStream(filePath);
 
-			article.title = related_article.title;
-			article.href = related_article.href || related_article.url;
-			
-			page.related_articles.push(article);
-		}
-	}
+		// me: is it necessary to end the response after createReadStream and pipe?
+		// copilot: yes, it is necessary to end the response after createReadStream and pipe
 
-	let tmp_path = "/";
-	let e = new ArticlePathElement(tmp_path, tmp_path)
-	page.article_path_elements.push(e);
-	for (let path_elem of path.path_list) {
-		tmp_path += path_elem + "/";
-		let e = new ArticlePathElement(tmp_path, path_elem);
-		page.article_path_elements.push(e);
-	}
-
-	response.write(page.to_html_page());
-	response.end();
-
-	return true;
-}
-
-function serveHtmlFile(filePath: string, response: http.ServerResponse) : boolean {
-	if (!isHtmlFile(filePath)) {
-		return false;
-	}
-
-	response.writeHead(200, {
-		'Content-Type': 'text/html'
-	});
-
-	fs.createReadStream(filePath).pipe(response);
-
-	return true;
-}
-
-function serveIcoFile(filePath: string, response: http.ServerResponse) : boolean {
-	if (!isIcoFile(filePath)) {
-		return false;
-	}
-
-	response.writeHead(200, {
-		'Content-Type': 'image/x-icon'
-	});
-
-	fs.createReadStream(filePath).pipe(response);
-
-	return true;
-}
-
-function serveRawFile(filePath: string, response: http.ServerResponse) : void {
-	fs.createReadStream(filePath).pipe(response);
-	// or... https://stackoverflow.com/questions/51962554/node-js-transfer-large-files-without-consuming-a-lot-of-memory
-}
-
-function serveFile(filePath: string, response: http.ServerResponse, path : RequestPath) {
-	
-	// Markdown
-	if (serveMarkdownFile(filePath, response, path)) { return; }
-
-	// Html
-	if (serveHtmlFile(filePath, response)) { return; }
-
-	// Ico
-	// https://stackoverflow.com/questions/39552736/set-favicon-in-http-server
-	if (serveIcoFile(filePath, response)) { return; }
-
-	// any other file
-	serveRawFile(filePath, response);
-}
-
-
-
-
-export default function(netname : string, port : number) {
-	
-	let host = "localhost";
-	
-	if (netname) {
-		let nets = networkInterfaces();
-
-		// check if we have a network interface with the given name
-		if (nets[netname]) {
-			let found = false;
-			for (let net of nets[netname]) {
-				if (net.family === "IPv4") {
-					host = net.address;
-					found = true;
-					break;
-				}
-			}
-			if (!found) {
-				throw new Error("net " + netname + " has no IPv4 address");
-			}
-		} else {
-			throw new Error("No network interface with name " + netname);
-		}
-	}
-
-	const server = http.createServer((req : http.IncomingMessage, res : http.ServerResponse) => {
-		console.log(req.url);
-	
-		let tmp_url = req.url.slice(1);
-	
-		if (!tmp_url) {
-			tmp_url = "/";
-		}
-	
-		console.log("tmp_url", tmp_url)
-		let path = RequestPath.parse(tmp_url);
-	
-		const filePath = findFile(tmp_url.split("?")[0], root);
-	
-		console.log(`query`, path.path, path.query);
-		console.log("filePath", filePath);
-	
-		if (filePath) {
-	
-			if (filePath === "///REDIRECT-SLASH///") {
-				console.log("redirecting to", "/" + path.path + '/' + (path.query ? '?' + path.query : ''));
-				res.writeHead(303, {
-					// see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#redirection_messages
-					'Location': "/" + path.path + '/' + (path.query ? '?' + path.query : '')
-				});
-				res.end();
-				return;
-			}
-	
-			if (path.query === "raw") {
-				console.log("raw", filePath);
-				serveRawFile(filePath, res);
-				return;
-			}
-	
-			serveFile(filePath, res, path);
-		} else {
-			res.writeHead(404);
+		stream.on('end', () => {
+			console.log("stream ended");
 			res.end();
-		}
-	});
+		});
+
+		stream.pipe(res);
+
+		return true;
+	}
 	
-	server.listen(port, host, () => {
-		let local_url = `http://${host}:${port}`;
-		if (netname) {
-			qrcodeTerminal.generate(local_url, { small: true });
-		}
-		console.log(`Server is running on ${local_url}`);
-		console.log(__dirname);
-	});
-	
-	io = new Server(server);
-	
-	io.on('connection', (socket) => {
-		console.log('a user connected');
-	});
+	return false;
 }
+
+function serveFile(filePath: string, req : express.Request, res: express.Response, processed : boolean = true) : boolean {
+	if (fs.existsSync(filePath)) {
+
+		if (processed) {
+			// here te files that are not directly served but have to be processed before serving
+
+			// markdown gets processed
+			if (filePath.endsWith(".md")) {
+				serveProcessedMd(filePath, req, res);
+				return true;
+			}
+		}
+
+		res.sendFile(filePath);
+		watchFile(filePath);
+		return true;
+	}
+
+	if (!processed) {
+		return false;
+	}
+
+	// TODO if .html and not found, try .md
+	let htmlExt = ".html";
+	if (filePath.endsWith(".html")) {
+		let stripped = filePath.substring(0, filePath.length - htmlExt.length);
+
+		if (serveFile(stripped + ".md", req, res, processed)) { return true; }
+	}
+
+	return false;
+}
+
+function serveFolderChildrenIndex(folderPath: string, res: express.Response) {
+	// get all the childs
+	const files = fs.readdirSync(folderPath);
+
+	let html = "";
+
+	for (let i = 0; i < files.length; i++) {
+		const file = files[i];
+
+		const filePath = path.join(folderPath, file);
+
+		if (fs.statSync(filePath).isDirectory()) {
+			html += `<a href="${file}/">${file}/</a><br>`;
+		} else {
+			html += `<a href="${file}">${file}</a><br>`;
+		}
+	}
+
+	let page = new BasicHtml5Page();
+	page.title = "Dir Index";
+	page.body_content = html;
+
+	res.setHeader("Content-Type", default_mime_types["html"]);
+	res.end(page.html);
+}
+
+function serveFolder(filePath: string, req : express.Request, res: express.Response) {
+	
+	if (!fs.existsSync(filePath)) {
+		logger.error(`folder does not exist, filePath: "${filePath}`);
+
+		send_404(req, res);
+		return;
+	}
+
+	if (!fs.statSync(filePath).isDirectory()) {
+		logger.error(`filePath is not a folder, filePath: "${filePath}"`);
+
+		send_404(req, res);
+		return;
+	}
+
+	let indexFilePath = path.join(filePath, "index.html");
+
+	if (serveFile(indexFilePath, req, res, true)) {
+		return;
+	}
+
+	serveFolderChildrenIndex(filePath, res);
+}
+
+app.get("/favicon.ico", function(req : express.Request, res : express.Response) {
+	// send "content/favico.svg"
+	let file = "favicon2.svg";
+	
+	let fpath = path.join(__dirname, "../content/", file);
+
+	res.sendFile(fpath, {}, (err) => {
+		if (err) {
+			console.log(err);
+		} else {
+			console.log("Sent file:", file);
+		}
+	});
+});
+
+app.get(`/*`, function(req : express.Request, res : express.Response) {
+	let parsedUrl = url.parse(req.url, true);
+	let pathname = parsedUrl.pathname;
+
+	if (!validate_url(pathname, req, res)) {
+		return;
+	}
+
+	//let localPath = path.normalize(path.join(viewBaseFolder, pathname));
+
+	let filePath = findFile(pathname, viewBaseFolder);
+
+	if (!filePath) {
+		send_404(req, res);
+		return;
+	}
+
+	if (filePath == "///REDIRECT-SLASH///") {
+		res.redirect(redirection_messages.SeeOther, pathname + "/");
+		return;
+	}
+
+	if (filePath == "///REDIRECT-NO-SLASH///") {
+		res.redirect(redirection_messages.SeeOther, pathname.slice(0, -1));
+		return;
+	}
+
+	let stat = fs.statSync(filePath);
+
+	if (stat.isDirectory()) {
+		serveFolder(filePath, req, res);
+		return;
+	}
+
+	if (stat.isFile()) {
+		let raw = req.query["raw"] !== undefined ? true : false;
+		let plain = req.query["plain"] !== undefined ? true : false;
+		if (!raw && plain) {
+			servePlainFile(filePath, req, res);
+		} else {
+			serveFile(filePath, req, res, !raw);
+		}
+		return;
+	}
+});
+
+app.get('/*.md', function(req : express.Request, res : express.Response) {
+
+	let page = new ArticlePage;
+	page.article_html_content = "Hello World";
+	page.scripts.push({ src: "/a.js", async: true });
+	page.styleSheets.push("/a.css");
+
+	res.setHeader('Content-Type', 'text/plain');
+	res.end(page.html);
+});
+
+app.get('/*', function(req : express.Request, res : express.Response) {
+
+	res.setHeader('Content-Type', 'text/html');
+	res.end(`<!DOCTYPE html>
+		<html>
+			<head>
+				<title>Hello World</title>
+			</head>
+			<body>
+				<h1>Hello World</h1>
+			</body>
+		</html>`);
+	//res.end('You\'re in reception');
+});
+
+server.listen(port, hostname, () => {
+	logger.info(`server listening on port ${port}`);
+
+	let local_url = `http://${hostname}:${port}`;
+
+	if (hostname != "localhost") {
+		qrcodeTerminal.generate(local_url, { small: true });
+	}
+
+	logger.info(`\n\n\n================================\n\n\n`);
+
+	logger.info(`server is listening on ${local_url}`);
+});
+// listen from server, not from app!
+// see https://towardsdatascience.com/building-a-real-time-web-app-in-nodejs-express-with-socket-io-library-d9b50aded6e6
+//app.listen(port, "10.0.1.5", () => {
+//	logger.info(`server listening on port ${port}`);
+//});
+

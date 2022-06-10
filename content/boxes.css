@@ -15,6 +15,17 @@ lc-def {
     /*background-color: rgba(var(--rgb_color), 0.1);*/
     border-color: rgb(var(--rgb_color));
 }
+
+lc-note > p:first-of-type, lc-solution > p:first-of-type, lc-todo > p:first-of-type, lc-warning > p:first-of-type,
+lc-def > p:first-of-type {
+    display: inline;
+}
+
+lc-note > p:first-of-type::before, lc-solution > p:first-of-type::before, lc-todo > p:first-of-type::before, lc-warning > p:first-of-type::before,
+lc-def > p:first-of-type::before {
+    content: none;
+}
+
 lc-note::before, lc-solution::before, lc-todo::before, lc-warning::before,
 lc-def::before {
     /*color: rgb(var(--rgb_color));*/
@@ -27,23 +38,23 @@ lc-def::before {
 }
 
 lc-note::before {
-    content: "\1F6C8  NOTE:";
+    content: "\1F6C8\FE0F  NOTE:";
 }
 lc-solution::before {
-    content: "\1F6C8  SOLUTION:";
+    content: "\1F6C8\FE0F  SOLUTION:";
 }
 
 lc-warning {
     --rgb_color : 180, 126, 9;
 }
 lc-warning::before {
-    content: "\26A0  WARNING:";
+    content: "\26A0\FE0F  WARNING:";
 }
 lc-todo {
     --rgb_color: 137, 43, 226;
 }
 lc-todo::before {
-    content: "\26A0  TODO:";
+    content: "\26A0\FE0F  TODO:";
 }
 
 lc-def::before {

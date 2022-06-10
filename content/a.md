@@ -48,4 +48,28 @@ ciao
 
 [a](b)
 
+::: warning
+ciao
+:::
+
+::: todo
+ciao
+:::
+
+::: note
+ciao
+:::
+:info:
+
+&#FE0F;
+&#9888;&#9888;&#65039;
+&#9658;
+&#767;
+&#2400;
+
+
 <span style="color: red;">ca</span>
+
+
+a 
+a
