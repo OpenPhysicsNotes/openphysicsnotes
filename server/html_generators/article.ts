@@ -201,7 +201,7 @@ ${this._tmp_bottom}
 			html += `<a href="vscode://${this.fileUrl}" id="edit-link">local</a>\n`;
 		} else {
 			html += `<a href="https://github.com/OpenPhysicsNotes/openphysicsnotes/blob/main/content${this.fileUrl}">source</a>\n`;
-			html += `<a href="https://github.dev/OpenPhysicsNotes/openphysicsnotes/blob/main/content${this.fileUrl}" id="edit-link">edit</a>\n`
+			html += `<a href="https://github.dev/OpenPhysicsNotes/openphysicsnotes/blob/main/content${this.fileUrl}" target="_blank" id="edit-link">edit</a>\n`
 		}
 
 		html += `<a href="${this.url}?raw">raw source</a>\n`;
