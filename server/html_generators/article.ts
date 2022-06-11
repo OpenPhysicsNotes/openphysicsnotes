@@ -266,7 +266,7 @@ socket.on('file-changed', function (msg) {
 		// TODO https://stackoverflow.com/questions/39144227/get-list-of-all-js-files-loaded-on-a-web-page
 		// only when necessary
 
-		this.scripts.push("https://cse.google.com/cse?cx=2f38dddaa15003883");
+		this.scripts.push("https://cse.google.com/cse.js?cx=2f38dddaa15003883");
 	}
 
 	private _configure_styleSheets() {
