@@ -266,7 +266,15 @@ socket.on('file-changed', function (msg) {
 		// TODO https://stackoverflow.com/questions/39144227/get-list-of-all-js-files-loaded-on-a-web-page
 		// only when necessary
 
+		// google programmable search engine
 		this.scripts.push("https://cse.google.com/cse.js?cx=2f38dddaa15003883");
+
+		// google analytics
+		this.scripts.push({src: "https://www.googletagmanager.com/gtag/js?id=G-HF0E5XWBFL", async: true});
+		this.scripts.push({code: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HF0E5XWBFL');`});
 	}
 
 	private _configure_styleSheets() {
