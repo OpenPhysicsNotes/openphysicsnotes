@@ -46,6 +46,10 @@ code {
     font-size: 90%;
 }
 
+:not(pre) code {
+    color: rgb(219, 203, 171);
+}
+
 code {
     background-color: var(--code_background_color, red);
     border-radius: 0.25em;
