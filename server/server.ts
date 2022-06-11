@@ -22,6 +22,8 @@ import { init_io, io } from './io';
 import { getHostName, getPort } from './hostname';
 
 import qrcodeTerminal from 'qrcode-terminal';
+import { getMyIp } from './my_ip';
+import { setup_opn_api } from './api';
 
 const hostname = getHostName();
 const port = getPort();
@@ -251,6 +253,8 @@ function serveFolder(filePath: string, req : express.Request, res: express.Respo
 
 	serveFolderChildrenIndex(filePath, res);
 }
+
+setup_opn_api(app);
 
 app.get("/favicon.ico", function(req : express.Request, res : express.Response) {
 	// send "content/favico.svg"
