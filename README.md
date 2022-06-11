@@ -44,6 +44,7 @@ Note that this website **is not** a *encyclopedia*, use [WikipediA](wikipedia.or
  - [ ] pdf and latex exportation
  - [ ] un file config.ts per fare in modo che alcune impostazioni come live reload sia abilitato solo in development; move reloader in a separate file instead of plain js inside the html
  - [ ] [compression](https://www.npmjs.com/package/compression)
+ - [ ] add allowed extensions such as lcml or lcmd and add a vscode extension for a correct preview or extend default MD preview
 
 ## Stuff organization
 
