@@ -1,7 +1,7 @@
 # openphysicsnotes
 Open Physics Notes **server** and **content** main repository.
 
-Visit our website @ [openphysicsnotes.org](openphysicsnotes.org)!
+Visit our website @ [openphysicsnotes.org](http://openphysicsnotes.org)!
 
 ## About this project
 
