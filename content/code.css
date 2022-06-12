@@ -46,7 +46,7 @@ code {
     font-size: 90%;
 }
 
-:not(pre) code {
+:not(pre) > code {
     color: rgb(219, 203, 171);
 }
 
