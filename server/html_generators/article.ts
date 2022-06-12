@@ -2,6 +2,7 @@
 import { BasicHtml5Page } from './basic_html'
 import Markdown2Html from '../markdown'
 import logger from '../logger';
+import { watcher_enabled } from '../files_watcher';
 
 var mdTransformer = new Markdown2Html();
 
@@ -258,18 +259,21 @@ document.addEventListener("DOMContentLoaded", function() {{
 }})
 `
 		});
-		this.scripts.push({
-			src: "/socket.io.min.js"
-		});
-		this.scripts.push({
-			code: `var socket = io();
+
+		if (watcher_enabled) {
+			this.scripts.push({
+				src: "/socket.io.min.js"
+			});
+			this.scripts.push({
+				code: `var socket = io();
 socket.on('file-changed', function (msg) {
 	console.log("file-changed:", msg);
 	location.reload();
 });`
-		});
-		// TODO https://stackoverflow.com/questions/39144227/get-list-of-all-js-files-loaded-on-a-web-page
-		// only when necessary
+			});
+			// TODO https://stackoverflow.com/questions/39144227/get-list-of-all-js-files-loaded-on-a-web-page
+			// only when necessary
+		}
 
 		// google programmable search engine
 		this.scripts.push("https://cse.google.com/cse.js?cx=2f38dddaa15003883");

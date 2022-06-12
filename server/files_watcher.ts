@@ -6,6 +6,22 @@ import logger from './logger';
 
 import { io } from './io';
 
+let _watcher_enabled = false;
+
+/*if (process.env.NODE_ENV === 'development') {
+	  _watcher_enabled = true;
+}
+if (process.env.NODE_ENV === 'production') {
+	  _watcher_enabled = false;
+}*/
+if (process.env.ONLINE === 'true') {
+	_watcher_enabled = false;
+} else {
+	_watcher_enabled = true;
+}
+
+export const watcher_enabled = _watcher_enabled;
+
 var watchingFiles = new Map<string, FSWatcher>();
 
 /**
@@ -14,7 +30,7 @@ var watchingFiles = new Map<string, FSWatcher>();
  */
 export function watchFile(filePath: string) {
 
-	if (process.env.ONLINE === 'true') {
+	if (!watcher_enabled) {
 		return;
 	}
 

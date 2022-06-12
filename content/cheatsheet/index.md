@@ -64,7 +64,7 @@ normal text
 ### Bold and Italic
 
 ```md
-**string**
+**strong**
 *emphasis*
 ```
 
