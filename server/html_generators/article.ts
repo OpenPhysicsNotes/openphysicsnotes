@@ -248,8 +248,13 @@ ${this._tmp_bottom}
 			code: `//hljs.highlightAll();
 document.addEventListener("DOMContentLoaded", function() {{
 	document.querySelectorAll('code:not(.nohighlight)').forEach((block) => {{
-		hljs.highlightElement(block);
+		//hljs.highlightElement(block);
 	}});
+	// https://github.com/highlightjs/highlight.js/issues/1737
+	document.querySelectorAll('pre code:not([class])').forEach(function($) {
+		$.className = 'no-highlight';
+	});
+	hljs.highlightAll()
 }})
 `
 		});
