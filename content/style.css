@@ -141,6 +141,7 @@ header img.logo {
     border-style: solid;
     border-color: transparent;
     height: 100%;
+    width: 5em; /*!!! da migliorare*/
     box-sizing: border-box;
 }
 
