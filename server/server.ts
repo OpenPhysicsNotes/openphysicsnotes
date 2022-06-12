@@ -24,12 +24,15 @@ import { getHostName, getPort } from './hostname';
 import qrcodeTerminal from 'qrcode-terminal';
 import { getMyIp } from './my_ip';
 import { setup_opn_api } from './api';
+import { setup_middlewares } from './middlewares';
 
 const hostname = getHostName();
 const port = getPort();
 const viewBaseFolder = path.join(__dirname, "../content/");
 
 var app = express();
+
+setup_middlewares(app);
 
 var server = http.createServer(app);
 init_io(server);
