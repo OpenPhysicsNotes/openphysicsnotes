@@ -64,16 +64,15 @@ normal text
 ### Bold and Italic
 
 ```md
-**bold**
-*italic*
+**string**
+*emphasis*
 ```
 
 is equivalent to
 
 ```html
-<b>bold</b>
-<strong>bold</strong>
-<em>italic</em>
+<strong>strong</strong> (style equivalent to <b>bold</b>)
+<em>emphasis</em> (style equivalent to <i>italic</i>)
 ```
 
 ### Links

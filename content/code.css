@@ -290,3 +290,22 @@ code .language-css {
     text-decoration: none;
     color: inherit;
 }
+
+.hljs-section {
+    text-decoration: none;
+    color: cornflowerblue;
+}
+.hljs-strong {
+    text-decoration: none;
+    color: inherit;
+    font-weight: bold;
+}
+.hljs-emphasis {
+    text-decoration: none;
+    color: inherit;
+    font-style: italic;
+}
+.hljs-link {
+    text-decoration: underline;
+    color: cornflowerblue;
+}
