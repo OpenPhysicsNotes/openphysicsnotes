@@ -37,7 +37,8 @@ pre.inline-height {
     max-height: 30em;
 }
 
-code {
+code,
+var, kbd {
     color: var(--code-color);
     font-family: Consolas;
 
@@ -50,7 +51,8 @@ code {
     color: rgb(219, 203, 171);
 }
 
-code {
+code,
+var, kbd {
     background-color: var(--code_background_color, red);
     border-radius: 0.25em;
     padding-left: 0.25em;
@@ -106,6 +108,13 @@ table.members-list {
     border-radius: 0.25em;
 }
 
+kbd {
+    padding: 0.25em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    border: solid 1px var(--code-color);
+}
+
 /*
 ================================================================
                               TAGS
@@ -137,7 +146,7 @@ code-concept, code-class, code .class-name,
     color: rgb(78, 201, 186);
 }
 
-code-var,
+code-var, var,
 .hljs-variable {
     text-decoration: none;
     color: rgb(156, 220, 254);
@@ -286,7 +295,8 @@ lc-tikz-fig-container svg {
 }
 
 code .language-javascript,
-code .language-css {
+code .language-css,
+code .language-xml {
     text-decoration: none;
     color: inherit;
 }
@@ -308,4 +318,9 @@ code .language-css {
 .hljs-link {
     text-decoration: underline;
     color: cornflowerblue;
+}
+.hljs-quote {
+    text-decoration: none;
+    color: inherit;
+    font-style: italic;
 }
