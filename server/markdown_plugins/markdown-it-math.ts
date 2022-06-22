@@ -9,6 +9,7 @@ import StateInline from 'markdown-it/lib/rules_inline/state_inline'
 import type MarkdownIt from 'markdown-it';
 import Token from 'markdown-it/lib/token';
 import Renderer from 'markdown-it/lib/renderer';
+import { attrs_to_string, getAttrs } from './attrs';
 
 function fix_tex_math_html(src : string) : string {
 	src = src.replace("<", "&lt;");
@@ -58,7 +59,7 @@ function texMath(state: StateInline, silent : boolean) : boolean {
 		return false;
 	}
 
-	const nextPos = endMarkerPos + endMarker.length;
+	let nextPos = endMarkerPos + endMarker.length;
 	if (endMarker.length === 1) {
 		// Skip if $ is preceded by a space character
 		const beforeEndMarker = state.src.at(endMarkerPos - 1);
@@ -74,9 +75,38 @@ function texMath(state: StateInline, silent : boolean) : boolean {
 		}
 	}
 
+	let info = "";
+
+	// if it is followed by {...}, add it to info
+	const nextChar = state.src.charCodeAt(nextPos);
+	if (nextChar === 0x7B /* { */) {
+		const endPos = state.src.indexOf("}", nextPos);
+		if (endPos !== -1) {
+			info = state.src.slice(nextPos, endPos + 1);
+			console.log(info);
+			nextPos = endPos + 1;
+		}
+	}
+
 	if (!silent) {
-		const token = state.push(endMarker.length === 1 ? 'inline_math' : 'display_math', '', 0);
+		const token = state.push(endMarker.length === 1 ? 'inline_math' : 'display_math', 'lc-tex-math', 0);
+		token.markup = endMarker;
 		token.content = state.src.slice(startMathPos, endMarkerPos);
+
+		// looks like a bad combination of
+		// markdown-it-attrs and markdown-it-bracketed-spans
+		// modifies our content if it ends with "{something}"
+		// TODO ISSUE
+		// TODO WHY???
+		// why inline code is not affected
+		token["_tex_content"] = token.content;
+
+		if (info) {
+			token.info = info;
+		}
+
+		// TODO REMOVE! MOVE INTO A CUSTOM "markdown-it-attrs"
+		token.attrs = getAttrs(token.info, 0).attrs;
 	}
 	state.pos = nextPos;
 	return true;
@@ -88,12 +118,12 @@ export default (md : MarkdownIt) => {
 	md.renderer.rules["inline_math"] = (tokens: Token[], idx: number, options: MarkdownIt.Options, env: any, self: Renderer) : string => {
 		let token = tokens[idx];
 
-		return `<i-math>${fix_tex_math_html(token.content)}</i-math>`
+		return `<i-math ${attrs_to_string(token.attrs)}>${fix_tex_math_html(token["_tex_content"])}</i-math>`
 	};
 
 	md.renderer.rules["display_math"] = (tokens: Token[], idx: number, options: MarkdownIt.Options, env: any, self: Renderer) : string => {
 		let token = tokens[idx];
 		
-		return `<tex-math>${fix_tex_math_html(token.content)}</tex-math>`
+		return `<tex-math ${attrs_to_string(token.attrs)}>${fix_tex_math_html(token["_tex_content"])}</tex-math>`
 	};
 };

@@ -252,10 +252,11 @@ document.addEventListener("DOMContentLoaded", function() {{
 		//hljs.highlightElement(block);
 	}});
 	// https://github.com/highlightjs/highlight.js/issues/1737
-	document.querySelectorAll('pre code:not([class])').forEach(function($) {
-		$.className = 'no-highlight';
+	document.querySelectorAll('code:not([class*="language-"])').forEach(function($) {
+		$.className = $.className ? $.className + ' no-highlight' : 'no-highlight';
 	});
-	hljs.highlightAll()
+	hljs.configure({cssSelector: 'code[class*="language-"]'});
+	hljs.highlightAll();
 }})
 `
 		});

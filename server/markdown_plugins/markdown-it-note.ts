@@ -10,6 +10,7 @@ import type MarkdownIt from 'markdown-it';
 import type Token from 'markdown-it/lib/token';
 
 import containerPlugin from 'markdown-it-container';
+import { attrs_to_string, getAttrs } from './attrs';
 
 function defContainer(md : MarkdownIt, name : string) {
 	containerPlugin(md, name, {
@@ -17,7 +18,18 @@ function defContainer(md : MarkdownIt, name : string) {
 
 			if (tokens[idx].nesting === 1) {
 				// opening tag
-				return `<lc-${name}>\n`;
+				let token = tokens[idx];
+
+				// TODO remove and do with custom markdown-it-attrs
+				if (token.info.indexOf(" {") !== -1) {
+					if (token.info.indexOf("}") !== -1) {
+						if (!token.attrs) {
+							token.attrs = getAttrs(token.info, token.info.indexOf("{")).attrs;
+						}
+					}
+				}
+
+				return `<lc-${name} ${attrs_to_string(token.attrs)}>\n`;
 			} else {
 				// closing tag
 				return `\n</lc-${name}>`;
