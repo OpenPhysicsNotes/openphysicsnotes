@@ -7,9 +7,22 @@ import drive_kfs from "./drive_kfs"
 import express from 'express';
 import { send_404 } from "../404";
 
+import proxy_ from 'http-proxy';
+import logger from "../logger";
+
 const BASE = "drive"
 const CONTENT = "content"
 const CONTENT_PATH = path.join(BASE, CONTENT);
+
+const DRIVE_PROXY_ENABLED = process.env.FALLBACK_DRIVE_PROXY !== 'false'
+const DRIVE_PROXY = process.env.FALLBACK_DRIVE_PROXY || 'http://openphysicsnotes.org';
+
+let proxy : proxy_ | null;
+if (DRIVE_PROXY_ENABLED) {
+	proxy = proxy_.createProxyServer({
+		target: DRIVE_PROXY
+	})
+}
 
 const BLOB = "blob"
 const NOW = 'now';
@@ -43,11 +56,27 @@ export function serveFile(filePath : string, req : express.Request, res : expres
 
 	console.log("jsonPath", jsonPath);
 
+	const call_proxy = () => {
+		if (!DRIVE_PROXY_ENABLED) {
+			return;
+		}
+
+		logger.info(`proxying to ${DRIVE_PROXY}`);
+
+		proxy.web(req, res, null, (proxy_error) => {
+			console.log("proxy_error", proxy_error);
+		})
+	};
+
 	let rawPath = "";
 	try {
 		// try to get the actual file path
 		rawPath = drive_kfs.getRawFilePath(jsonPath);
 	} catch (e) {
+		logger.warn(`drive, serveFile, cound not find ${filePath}`);
+		call_proxy();
+		return;
+
 		send_404(req, res);
 		return;
 	}

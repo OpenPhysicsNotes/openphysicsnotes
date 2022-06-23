@@ -2,7 +2,7 @@
 import _kfs from 'key-file-storage'
 import path from 'path';
 
-const KFS_BASE_DIR = "./tmp/drive"
+const KFS_BASE_DIR = process.env.DRIVE_PATH || "./tmp/drive"
 const KFS_DIR = path.join(KFS_BASE_DIR, "kfs");
 const KFS_RAW_STORAGE_DIR = path.join(KFS_BASE_DIR, "raw_storage");
 
