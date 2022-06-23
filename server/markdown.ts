@@ -12,6 +12,7 @@ import center from 'markdown-it-center-text'
 import anchor from "markdown-it-anchor"
 import attrs from "markdown-it-attrs"
 import bracketed_spans from 'markdown-it-bracketed-spans'
+import kbd from 'markdown-it-kbd'
 
 import type StateCore from "markdown-it/lib/rules_core/state_core"
 
@@ -51,6 +52,7 @@ class Markdown2Html {
 		});
 		this.md.use(attrs);
 		this.md.use(bracketed_spans);
+		this.md.use(kbd);
 	}
 
 	/**

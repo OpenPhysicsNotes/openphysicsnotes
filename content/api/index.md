@@ -1,21 +1,17 @@
 
 
-| API (`/api/...`)  | params | returns | description   |
-|-------------------|--------|---------|---------------|
-| [`hello`](#hello) | any    | JSON    | test function |
-| `answer`          | none   | JSON    | test function |
-
-```
-a
-```
+| API (`/api/...`)  | params | returns | description            |
+|-------------------|--------|---------|------------------------|
+| [`hello`](#hello) | any    | JSON    | test function          |
+| `answer`          | none   | JSON    | test function          |
+| `git/pull`        | none   | JSON    | executes `git pull`    |
+| `git/pull/status` | none   | JSON    | check last pull output |
 
 ## Functions
 
 ### `hello`
 
 #### params
-
-any
 
 #### returns
 ```json

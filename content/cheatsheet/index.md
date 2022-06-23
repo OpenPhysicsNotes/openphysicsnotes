@@ -7,6 +7,29 @@ related_articles:
 
 # Cheatsheet
 
+:::: todo
+add cheatsheet for:
+ - `<kbd>`{.language-html} `[[A]]`
+ - `markdown-it-attrs`
+ - `markdown-it-bracketed-spans` `[lorem]{.red}`
+ - same for equations  `$...${.squared-red}` and `$$...$${.squared #id}`
+ - `::: todo {.red}`
+ - escapes?
+ - `::: details proof {open}`
+ - footnotes
+
+::: todo
+add:
+```md
+> **note**
+> note
+```
+:::
+::: todo
+[samp](https://www.w3schools.com/tags/tag_samp.asp)
+:::
+::::
+
 The *Open Physics Notes* server uses the [markdown-it](https://npmjs.org/package/markdown-it) library to render the content.
 
 It supports most of the [GFM](https://github.github.com/gfm/) syntax, but we also add some custom features to help you write your notes.
@@ -23,7 +46,7 @@ add `\n` and `\\`.
 
 ### Paragraphs
 
-You can use **two blank lines** to separate paragraphs. You can also use the `<p>` tag to create a new paragraph, but this is not advised.
+You can use **two blank lines** to separate paragraphs. You can also use the `<p>`{.language-html} tag to create a new paragraph, but this is not advised.
 
 ### Headings
 
@@ -114,6 +137,14 @@ that renders as:
 
 You can add numbering to your equations by giving them an `id` or adding the `n` or `numbered` attribute:
 
+```md
+$$x^2$$
+$$x^2$${#eq:some-id}
+$$x^2$${id}
+$$x^2$${n}
+$$x^2$${numbered}
+```
+equivalent to
 ```html
 <tex-math>x^2</tex-math>
 <tex-math id="eq:some-id">x^2</tex-math>
@@ -132,8 +163,15 @@ that renders as:
 </div>
 
 You can also style equations using css:
+```md
+$$
+x^2
+$${style="border: 1px solid red; background: rgba(0, 255, 255, 0.125); color: cyan;"}
+```
 ```html
-<tex-math style="border: 1px solid red;">x^2</tex-math>
+<tex-math style="border: 1px solid red; background: rgba(0, 255, 255, 0.125); color: cyan;">
+    x^2
+</tex-math>
 ```
 <div class="render-preview">
 <tex-math style="border: 1px solid red; background: rgba(0, 255, 255, 0.125); color: cyan;">x^2</tex-math>
@@ -149,13 +187,11 @@ You can reference an equation using the `lc-ref` tag:
 <lc-ref href="#eq:some-id">eq. </lc-ref>
 </div>
 
-::: note
+:::: note
 You can **hover** a reference with your mouse to see the equation preview.
 
 ::: todo
 `tip` block here instead of `note`
-:::
-
 :::
 
 ::: todo
@@ -165,6 +201,7 @@ some markdown equivalent or authomatic link transform
 ::: todo
 explain that you can also reference equations in external documents using `<lc-ref href="some/page#eq:some-id">eq. </lc-ref>` syntax
 :::
+::::
 
 ## Some OPN specific utility elements
 

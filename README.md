@@ -46,6 +46,14 @@ Note that this website **is not** a *encyclopedia*, use [WikipediA](wikipedia.or
  - [ ] [compression](https://www.npmjs.com/package/compression)
  - [ ] add allowed extensions such as lcml or lcmd and add a vscode extension for a correct preview or extend default MD preview
  - [ ] [gfm warning](https://stackoverflow.com/questions/50544499/how-to-make-a-styled-markdown-admonition-box-in-a-github-gist) (`> :warning:`)
+ - [ ] issue `markdown-it-container`: nested should not require different numbers of `:` and should ignore inside code or similar. needs a different approach for the parser
+ - [ ] mozzilla like demo https://developer.mozilla.org/en-US/docs/Web/HTML/Element/br?retiredLocale=it
+ - [ ] github action to tell the servet to "git pull"
+ - [ ] stackedit like app for all the students to write personal notes
+ - [ ] a C++ addon for the drive api, use a custom C++ implementation of the kfs that uses a monolitic file for storing edits, use a differential system and **packed cache** system
+ - [ ] Any approved accounts can upload to drive, at least one approved git contribution is needed or explicitly added by admins; ban for illicit content upload
+ - [ ] ToS, EUA, drive ToS, articles and drive files licenses, drive attributions, etc... 
+ - [ ] caching system, like `memoize` for online server
 
 ## Stuff organization
 

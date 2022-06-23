@@ -16,6 +16,13 @@ lc-def {
     border-color: rgb(var(--rgb_color));
 }
 
+@media print {
+    lc-note, lc-solution, lc-todo, lc-warning,
+    lc-def {
+        --rgb_color: 0, 128, 0
+    }
+}
+
 lc-note > p:first-of-type, lc-solution > p:first-of-type, lc-todo > p:first-of-type, lc-warning > p:first-of-type,
 lc-def > p:first-of-type {
     display: inline;

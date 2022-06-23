@@ -17,7 +17,7 @@ import redirection_messages from './redirection_messages';
 import { extractMeta } from './meta_exctractor';
 
 import { watchFile } from './files_watcher';
-import http from 'http';
+import http, { METHODS } from 'http';
 import { init_io, io } from './io';
 import { getHostName, getPort } from './hostname';
 
@@ -26,32 +26,52 @@ import { getMyIp } from './my_ip';
 import { setup_opn_api } from './api';
 import { setup_middlewares } from './middlewares';
 
+import { viewBaseFolder } from './tmp';
+import { actual_404, send_404 } from './404';
+
+import { expressjwt as jwt, GetVerificationKey } from 'express-jwt';
+import jwks from 'jwks-rsa';
+
+import cors from 'cors';
+
+import drive from './drive'
+
+console.log(drive.toContentPath("a"))
+
 const hostname = getHostName();
 const port = getPort();
-const viewBaseFolder = path.join(__dirname, "../content/");
 
 var app = express();
 
+// TODO only in development or thrusted origins
+
+// allow cors on both get and post
+app.use(cors({
+	methods: "GET,POST",
+}));
+
 setup_middlewares(app);
+
+var jwtCheck = jwt({
+	secret: jwks.expressJwtSecret({
+		cache: true,
+		rateLimit: true,
+		jwksRequestsPerMinute: 5,
+		jwksUri: 'https://dev-loykkjlu.us.auth0.com/.well-known/jwks.json'
+  }) as GetVerificationKey,
+  audience: 'http://localhost:8080',
+  issuer: 'https://dev-loykkjlu.us.auth0.com/',
+  algorithms: ['RS256']
+});
+
+app.get("/api2/external", jwtCheck, (req, res) => {
+	res.send({
+	  msg: "Your access token was successfully validated!",
+	});
+  });
 
 var server = http.createServer(app);
 init_io(server);
-
-function actual_404(res: express.Response) {
-	res.status(404);
-	res.end("404 not found");
-}
-
-function send_404(req : express.Request, res : express.Response) {
-	res.status(404);
-
-	res.sendFile(path.join(viewBaseFolder, "404.html"), (err) => {
-		if (err) {
-			logger.error(`error while sending 404, err: ${err}`);
-			actual_404(res);
-		}
-	});
-}
 
 function validate_url(url : string, req : express.Request, res : express.Response) : boolean {
 	if (!url.startsWith("/")) {
@@ -272,6 +292,13 @@ app.get("/favicon.ico", function(req : express.Request, res : express.Response) 
 			console.log("Sent file:", file);
 		}
 	});
+});
+
+app.get("/drive/*", function(req : express.Request, res : express.Response) {
+	let filePath = decodeURI(req.url).substring("/drive/".length);
+
+	console.log(`serving drive file, filePath: "${filePath}"`);
+	drive.serveFile(filePath, req, res);
 });
 
 app.get(`/*`, function(req : express.Request, res : express.Response) {
