@@ -233,6 +233,29 @@ some caption
 
 ### Code
 
+#### Inline code
+
+You can add an inline code using the following syntax:
+````md
+This is a piece of `inline code`
+````
+
+#### Code block
+
+````md
+This is a code block:
+```
+some code!
+```
+````
+
+#### Syntax highlighting
+
+To enable syntax highlighting on a code block, use the regular code block but add the extension you usually write as the filename extension, for example:
+````md
+
+````
+
 ::: todo
 var, samp, kbd, etc
 :::
