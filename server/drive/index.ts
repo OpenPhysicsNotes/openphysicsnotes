@@ -22,7 +22,7 @@ function dateToBlobTag(date : Date) {
 	return NOW;
 }
 
-function toContentPath(_path : string, date? : string | Date) : string {
+/*function toContentPath(_path : string, date? : string | Date) : string {
 	
 	if (!date) {
 		date = NOW;
@@ -35,7 +35,7 @@ function toContentPath(_path : string, date? : string | Date) : string {
 	let result = path.join(CONTENT_PATH, BLOB, date, _path).replace(/\\/g, '/');
 
 	return result;
-}
+}*/
 
 export function serveFile(filePath : string, req : express.Request, res : express.Response) {
 
@@ -67,4 +67,4 @@ export function serveFile(filePath : string, req : express.Request, res : expres
 	res.sendFile(path.resolve(rawPath));
 }
 
-export default { toContentPath, serveFile };
+export default { /*toContentPath, */serveFile };

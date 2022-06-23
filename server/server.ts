@@ -36,8 +36,6 @@ import cors from 'cors';
 
 import drive from './drive'
 
-console.log(drive.toContentPath("a"))
-
 const hostname = getHostName();
 const port = getPort();
 
