@@ -38,6 +38,47 @@ function defContainer(md : MarkdownIt, name : string) {
 	})
 }
 
+function spoiler_container(md : MarkdownIt, name : string) {
+
+	// see https://github.com/markdown-it/markdown-it-container/blob/adb3defde3a1c56015895b47ce4c6591b8b1e3a2/README.md?plain=1#L59
+
+	const validate_REGEXP = new RegExp(`^${name}(\\s+(.*))?$`);
+	const summary_capture_REGEXP = new RegExp(`^${name}\\s+(.*?)($|( {))`);
+
+	containerPlugin(md, name, {
+		validate: (params : string) => {
+			return params.trim().match(validate_REGEXP);
+		},
+		render: (tokens : Token[], idx : number, options : any, env : any, self : any) => {
+			let token = tokens[idx];
+
+			var m = token.info.trim().match(summary_capture_REGEXP);
+
+			// TODO remove and do with custom markdown-it-attrs
+			if (token.info.indexOf(" {") !== -1) {
+				if (token.info.indexOf("}") !== -1) {
+					if (!token.attrs) {
+						token.attrs = getAttrs(token.info, token.info.indexOf("{")).attrs;
+					}
+				}
+			}
+
+			const summary = m ? m[1].trim() : "";
+
+			if (token.nesting === 1) {
+				// opening tag
+				if (summary || name !== "details") {
+					return `<details ${attrs_to_string(token.attrs)}><summary>${summary || name}</summary>\n`;
+				}
+
+				return `<details ${attrs_to_string(token.attrs)}>\n`;
+			} else {
+				// closing tag
+				return `\n</details>`;
+			}
+		}
+	});
+}
 
 export default function(md : MarkdownIt) {
 
@@ -46,4 +87,7 @@ export default function(md : MarkdownIt) {
 	defContainer(md, 'todo');
 	defContainer(md, 'def');
 	defContainer(md, 'solution');
+
+	spoiler_container(md, 'spoiler');
+	spoiler_container(md, 'details');
 };
