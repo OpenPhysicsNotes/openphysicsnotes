@@ -239,6 +239,8 @@ lc-nav-index > aside > li {
     padding: 0.25em;
     padding-left: 0.5rem;
     margin-left: 0.5rem;
+
+    transition: all 0.25s;
 }
 lc-nav-index > aside > li[active], lc-nav-index > aside > li[slightly-active] {
     border-left-color: hsl(var(--theme_HSL));
@@ -586,41 +588,78 @@ lc-figure.float.right {
     float: right;
 }
 
-.circled {
+.circled,
+[class*="circled-"] {
     border-radius: 50%;
     border: 1px solid gray;
     padding: 0.25em;
 }
 
-.squared {
+.squared,
+[class*="squared-"] {
     border-radius: 0.5em;
     border: 1px solid gray;
     padding: 0.25em;
 }
-div.squared {
+div.squared,
+div[class*="squared-"] {
     margin: 0.5em;
 }
 
-.underlined {
-    border-bottom: 1px solid gray;
+.underlined,
+[class*="underlined-"] {
+    /*border-bottom: 1px solid gray;*/
     /*padding-bottom: 0.25em;*/
+
+    text-decoration: underline;
 }
 
-.red:is(.squared, .circled, .underlined) {
+.strike-through, .strikeout, .sout, .strikethrough, .st,
+[class*="strike-through-"], [class*="strikeout-"], [class*="sout-"], [class*="strikethrough-"], [class*="st-"] {
+    text-decoration: line-through;
+}
+
+.squared-red, .circled-red {
     border-color: red;
 }
-.blue:is(.squared, .circled, .underlined) {
+.squared-blue, .circled-blue {
     border-color: cornflowerblue;
 }
-.green:is(.squared, .circled, .underlined) {
+.squared-green, .circled-green {
     border-color: green;
 }
-.yellow:is(.squared, .circled, .underlined) {
+.squared-yellow, .circled-yellow {
     border-color: yellow;
 }
-.orange:is(.squared, .circled, .underlined) {
+.squared-orange, .circled-orange {
     border-color: orange;
 }
+
+.underlined-red,
+.strike-through-red, .strikeout-red, .sout-red, .strikethrough-red, .st-red {
+    text-decoration-color: red;
+}
+
+.underlined-blue,
+.strike-through-blue, .strikeout-blue, .sout-blue, .strikethrough-blue, .st-blue {
+    text-decoration-color: cornflowerblue;
+}
+
+.underlined-green,
+.strike-through-green, .strikeout-green, .sout-green, .strikethrough-green, .st-green {
+    text-decoration-color: green;
+}
+
+.underlined-yellow,
+.strike-through-yellow, .strikeout-yellow, .sout-yellow, .strikethrough-yellow, .st-yellow {
+    text-decoration-color: yellow;
+}
+
+.underlined-orange,
+.strike-through-orange, .strikeout-orange, .sout-orange, .strikethrough-orange, .st-orange {
+    text-decoration-color: orange;
+}
+
 
 /*
 https://stackoverflow.com/questions/39858998/zoom-in-and-out-on-mouse-click-with-css
@@ -836,4 +875,46 @@ article > img, article > p > img {
     display: block;
     max-width: 80%;
     margin: auto;
+}
+
+.color-red, .red {
+    color: red;
+}
+
+/* TODO REMOVE, test only */
+@media print {
+    body > * {
+        display: none;
+    }
+    :root {
+        --text_color: black;
+    }
+    lc-content {
+        display: block;
+    }
+    lc-content > * {
+        display: none;
+    }
+    lc-content > article {
+        display: block;
+    }
+    tex-math, i-math {
+        break-inside: avoid;
+    }
+    article h1,
+    article h2,
+    article h3,
+    article h4,
+    article h5,
+    article h6 {
+        color: black;
+    }
+
+    lc-nav-index {
+        grid-column: first-start / first-end;
+        grid-row: 1 / 2;
+    }
+    lc-content {
+        grid-row: 2 / 3;
+    }
 }
