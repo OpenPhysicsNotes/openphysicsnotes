@@ -269,7 +269,9 @@ document.addEventListener("DOMContentLoaded", function() {{
 				code: `var socket = io();
 socket.on('file-changed', function (msg) {
 	console.log("file-changed:", msg);
-	location.reload();
+	if (!document.hidden ) {
+		location.reload();
+	}
 });`
 			});
 			// TODO https://stackoverflow.com/questions/39144227/get-list-of-all-js-files-loaded-on-a-web-page
