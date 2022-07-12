@@ -1,0 +1,220 @@
+
+.app-explorer {
+
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow: hidden;
+    
+    display: flex;
+    align-items: stretch;
+}
+
+.app-explorer-top-bar {
+    border-bottom: solid 1px var(--line_gray_color, red);
+
+    padding: 0.25em;
+
+    display: flex;
+}
+
+.app-path-navigator {
+    flex-grow: 1;
+    flex-wrap: wrap;
+
+    display: flex;
+    gap: 0.5em;
+}
+
+.path-nav-element {
+    border-radius: 0.5em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+
+.path-nav-separator, .path-nav-element {
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+}
+
+.path-nav-element:hover {
+    background: rgba(128, 128, 128, 0.125);
+}
+
+.app-explorer-content {
+    flex-grow: 1;
+    flex-shrink: 1;
+    
+    display: flex;
+    flex-direction: column;
+}
+
+.app-explorer-content-display {
+    flex-grow: 1;
+    flex-shrink: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.app-explorer-item {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+
+    padding: 0.25em;
+    border: solid 1px var(--line_gray_color, red);
+    border-left: none;
+    border-right: none;
+}
+
+.app-explorer-item-name {
+    flex-grow: 1;
+}
+
+.app-explorer-item-icon {
+    /*width: 1em;*/
+    height: 1.5em;
+}
+
+.app-explorer-table-container {
+    /*height: 20em;*/
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow-y: auto;
+}
+
+.app-explorer-table {
+    width: 100%;
+
+    /* see https://stackoverflow.com/questions/50361698/border-style-do-not-work-with-sticky-position-element */
+    /*border-collapse: collapse;*/
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.app-explorer-table tr td:first-child {
+    width: 1%;
+}
+
+.app-explorer-table-name-column {
+    /*width: 1%;*/
+}
+
+.app-explorer-table-type-column {
+    /*width: 1%;*/
+}
+
+table.app-explorer-table tbody,
+table.app-explorer-table thead {}
+
+.app-explorer-table thead {
+    /*position: sticky;
+    box-sizing: border-box;*/
+    /*background: white;*/
+    /*border-bottom: solid 1px var(--line_gray_color, red);*/
+}
+
+.app-explorer-table thead tr {
+    /*padding: 0.25em;*/
+
+    position: sticky;
+    top: 0;
+    background: white;
+}
+
+.app-explorer-table thead th {
+    /*background: wheat;
+    border-bottom: solid 1px var(--line_gray_color, red);*/
+    border-bottom: solid 1px var(--line_gray_color, red);
+    border-right: solid 1px var(--line_gray_color, red);
+}
+.app-explorer-table thead th:last-child {
+    border-right: inherit;
+}
+
+.app-explorer-table tbody {
+}
+
+.app-explorer-item-row {
+    /*transition: all 0.125s ease-in-out;*/
+}
+
+.app-explorer-item-row:hover {
+    background: rgba(128, 128, 128, 0.125);
+}
+
+.app-explorer-item-row.selected {
+    background: rgba(128, 128, 128, 0.25);
+}
+
+.app-explorer-loading {
+    display: flex;
+    align-items: center;
+}
+
+.app-explorer-loading-spinner {
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    border: solid 0.2em var(--line_gray_color, red);
+    border-top: solid 0.2em cyan;
+    border-right: solid 0.2em var(--line_gray_color, red);
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.app-explorer-table-container {
+    position: relative;
+}
+.app-explorer-dnd-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(50, 96, 187, 0.5);
+    z-index: 100;
+
+    display: none;
+}
+.app-explorer-dnd-overlay.visible,
+.app-explorer-dnd-overlay_ {
+    display: block;
+}
+
+.app-explorer-dnd-overlay-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+}
+
+.app-explorer-dnd-overlay-content-text-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    animation: fadein 0.5s ease-in-out;
+}
+
+@keyframes fadein {
+    0% { opacity: 0; }
+    25% { opacity: 1; transform: rotate(15deg); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(15deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.app-explorer-dnd-overlay-content-text-text-title {
+    font-size: 1.5em;
+    font-weight: bold;
+
+    text-align: center;
+}
+

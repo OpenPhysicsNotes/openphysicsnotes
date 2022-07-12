@@ -1,0 +1,12 @@
+
+
+.app-explorer-progress-bar {
+    height: 1em;
+    border-radius: 0.25em;
+    background: rgba(128, 128, 128, 0.25);
+}
+.app-explorer-progress-bar-progress {
+    background: blueviolet;
+    border-radius: 0.25em;
+    height: 100%;
+}

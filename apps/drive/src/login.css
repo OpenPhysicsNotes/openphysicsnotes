@@ -1,0 +1,13 @@
+
+
+.app-profile-container {
+    width: 2em;
+    height: 2em;
+}
+
+.app-profile-container-avatar-img {
+    width: 100%;
+    height: 100%;
+
+    border-radius: 50%;
+}
