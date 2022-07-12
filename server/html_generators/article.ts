@@ -8,16 +8,25 @@ var mdTransformer = new Markdown2Html();
 
 export class ArticleHeader {
 
+	public links : { name : string, href : string }[] = [
+		{ name: 'Study Plans', href: '/study_plans' },
+		{ name: 'About', href: '/about' },
+		{ name: 'Blog', href: '/blog' },
+		{ name: 'Docs', href: '/docs' },
+	];
+
+	private link_button(innerHtml : string, href : string) {
+		return `<div class="button"><a href="${href}">${innerHtml}</a></div>`;
+	}
+
 	get html() : string {
+
 		return `<header>
 	<div>
 		<!--div class="button"><a href="">OPN</a></div-->
 		<a href="/"><img class="button logo" src="/favicon.ico?deg=182" alt="OPN"></img></a>
 		<div class="links">
-			<div class="button"><a href="">References</a></div>
-			<div class="button"><a href="">Guides</a></div>
-			<div class="button"><a href="">pages</a></div>
-			<div class="button"><a href="">link</a></div>
+			${this.links.map(link => this.link_button(link.name, link.href)).join('')}
 		</div>
 		<!--div class="button"><a href="">search</a></div-->
 		<div class="search-form"><div class="gcse-search" data-gname="storesearch"></div></div>
