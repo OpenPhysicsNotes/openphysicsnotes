@@ -93,7 +93,11 @@ export function serveFile(filePath : string, req : express.Request, res : expres
 	}
 
 	// send the actual file
-	res.sendFile(path.resolve(rawPath));
+	if (fs.existsSync(rawPath)) {
+		res.sendFile(path.resolve(rawPath));
+	} else {
+		call_proxy();
+	}
 }
 
 export default { /*toContentPath, */serveFile };

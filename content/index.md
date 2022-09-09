@@ -61,6 +61,11 @@ related_articles:
 # other meta tags (optional)
 #meta:
 #  "og:pippo": "pluto"
+
+# see:
+# https://www.w3schools.com/tags/att_meta_http_equiv.asp
+# https://stackoverflow.com/questions/36333978/error-permission-denied-to-access-property-document
+# additional_head_content: <META HTTP-EQUIV="Access-Control-Allow-Origin" CONTENT="http://paolini.github.io">
 ---
 
 ![aaa](/drive/blob/now/b.png)
@@ -69,6 +74,38 @@ related_articles:
 <iframe style="width:100%; height:20em;" src="/drive/blob/now/study_plans/df.unipi/courses/AQM/lecture_notes/prof_alessandro_vichi/PIQM_lecture_notes.pdf"></iframe>
 
 `<iframe style="width:100%; height:20em;" src="/drive/blob/now/study_plans/df.unipi/courses/AQM/lecture_notes/prof_alessandro_vichi/PIQM_lecture_notes.pdf"></iframe>`{.language-html}
+
+<details>
+<summary>
+Bolle di sapone
+</summary>
+<iframe style="width:100%; height:20em;" src="https://paolini.github.io/jsbubble/" id="bubble-iframe"></iframe>
+</details>
+<script>
+  console.log("ciao");
+  /**
+ * @type {HTMLIFrameElement | null}
+ */
+let iframe = document.getElementById('bubble-iframe');
+console.log(iframe)
+iframe.onload = () => {
+  console.log("iframe loaded");
+	/**
+	 * @type {HTMLCanvasElement | null}
+	 */
+	let canvas = iframe.contentWindow.document.getElementById("canvas");
+  console.log(canvas)
+  console.log(iframe.contentWindow.document.body.innerHTML)
+	if (canvas) {
+		let ratio = canvas.width / canvas.height;
+		// 100% width, keep ratio
+		canvas.style.width = "100%";
+		canvas.style.aspectRatio = ratio;
+    console.log("Done");
+	}
+}
+iframe.contentWindow.onload();
+</script>
 
 # Open Physics Notes
 

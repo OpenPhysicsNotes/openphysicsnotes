@@ -137,6 +137,11 @@ export class ArticlePage extends BasicHtml5Page {
 				this.meta[key] = yaml.meta[key];
 			}
 		}
+
+		if (yaml.additional_head_content && typeof yaml.additional_head_content === "string") {
+			//this.additional_head_content = yaml.additional_head_content;
+			this.additional_head_content += yaml.additional_head_content;
+		}
 	}
 
 	get body() : string {
